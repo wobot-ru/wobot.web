@@ -1,0 +1,123 @@
+<div>
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <input ng-enter="searchByPhrase()" ng-model="query.filter.phrase" type="text" class="form-control"
+                           placeholder="Search for...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" ng-click="searchByPhrase()">Go!</button>
+                  </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="model.notFound">
+        Ничего не найдено для {{lastPhrase}}
+    </div>
+    <div ng-if="model.posts.total">
+
+        <div class="row">
+            <div class="col-md-3">
+                <h4>Ресурсы</h4>
+                <ul class="nav nav-pills nav-faceted nav-stacked">
+                    <li ng-class="{'active': sourceIsSelected(source.id)}" ng-repeat="source in model.aggs.sources">
+                        <a href="javascript:void(0);" ng-click="filterBySource(source.id);">
+                            {{source.name}}
+                            <span title="Количество упоминаний"
+                                  class="label label-primary">{{source.relevant_posts}}</span>
+                        </a>
+                    </li>
+                </ul>
+                <h4>Города</h4>
+                <ul class="nav nav-pills nav-faceted nav-stacked">
+                    <li ng-class="{'active': cityIsSelected(city.id)}" ng-repeat="city in model.aggs.cities">
+                        <a href="javascript:void(0);" ng-click="filterByCity(city.id);">
+                            {{city.name}}
+                            <span title="Доля упоминаний"
+                                  class="label label-primary">{{city.fraction | percentage}}</span>
+                            <span title="Количество упоминаний"
+                                  class="label label-primary">{{city.relevant_posts}}</span>
+                        </a>
+                    </li>
+                </ul>
+                <h4>Лидеры мнений</h4>
+                <ul class="nav nav-pills nav-faceted nav-stacked">
+                    <li ng-class="{'active': profileIsSelected(leader.id)}" ng-repeat="leader in model.aggs.leaders">
+                        <a href="javascript:void(0);" ng-click="filterByProfile(leader.id);">
+                            {{leader.name}}
+                            <span title="Охват" class="label label-primary">{{leader.reach}}</span>
+                            <span title="Количество упоминаний"
+                                  class="label label-primary">{{leader.relevant_posts}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-md-9">
+                <div class="mb20">
+                    <h4>
+                        <span class="label label-primary">Упоминаний: {{model.aggs.totalPosts.byPhrase}}</span>
+                        <span class="label label-primary">Авторов: {{model.aggs.totalProfiles.byPhrase}}</span>
+                        <span class="label label-primary">Охват: {{model.aggs.totalReach.byPhrase}}</span>
+                        <span class="label label-primary">Вовлеченность: {{model.aggs.totalEngagement.byPhrase}}</span>
+                    </h4>
+                </div>
+                <div class="mb20">
+                        <ul class="nav nav-pills nav-sorted">
+                            <li>
+                                <span class="title">Сортировать по</span>
+                            </li>
+                            <li ng-class="{'active': isSortedBy('relevance')}">
+                                <a ng-click="sort('relevance')">Релевантности</a>
+                            </li>
+                            <li ng-class="{'active': isSortedBy('reach')}">
+                                <a ng-click="sort('reach')">Охвату</a>
+                            </li>
+                            <li ng-class="{'active': isSortedBy('engagement')}">
+                                <a ng-click="sort('engagement')">Вовлеченности</a>
+                            </li>
+                        </ul>
+                </div>
+                <div class="pager-top">
+                    <span ng-pager ng-page-size="query.paging.pagesize"
+                          ng-current-page="query.paging.page"
+                          ng-total="model.posts.total" ng-page-click="changePage(page)"></span>
+                </div>
+                <div ng-repeat="post in model.posts.items">
+                    <a ng-href="{{post.href}}" target="_blank">
+                        <div ng-bind-html="post.text | trusted" class="mb15"></div>
+                    </a>
+                    <div class="row">
+                        <div class="col-md-3">
+                            Дата: <span ng-bind="post.post_date | date"></span>
+                        </div>
+                        <div class="col-md-2">
+                            Юзер:
+                            <a target="_blank" ng-href="{{post.profile.href}}">
+                                <span ng-bind="post.profile.name"></span> <span style="display: none;">{{post.profile_id}}</span>
+                            </a>
+                        </div>
+                        <div class="col-md-2">
+                            Город: <span ng-bind="post.profile.city"></span>
+                        </div>
+                        <div class="col-md-2">
+                            Охват: <span ng-bind="post.profile.reach"></span>
+                        </div>
+                        <div class="col-md-3">
+                            Вовлеченность: <span ng-bind="post.engagement"></span>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <div>
+                    <span ng-pager ng-page-size="query.paging.pagesize"
+                          ng-current-page="query.paging.page"
+                          ng-total="model.posts.total" ng-page-click="changePage(page)"></span>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

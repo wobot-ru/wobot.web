@@ -1,0 +1,5 @@
+﻿<ul class="pagination" ng-show="visible">
+    <li ng-repeat="page in pages" ng-class="{active: page.active, disabled: page.disabled}">
+        <a href="javascript:void(0);" title="{{page.title}}" ng-disabled="page.disabled" ng-click="page.disabled || ngPageClick({page: page.val})" ng-bind="page.text"></a>
+    </li>
+</ul>

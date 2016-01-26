@@ -1,0 +1,93 @@
+@import url('../../node_modules/bootstrap/less/bootstrap.less');
+@import url('../../node_modules/font-awesome/less/font-awesome.less');
+
+body {
+  //min-height: 2000px;
+  padding-top: 70px;
+}
+a{
+  cursor: pointer;
+}
+
+.spinner {
+  .bg {
+    .modal-backdrop;
+    .modal-backdrop.in;
+    z-index: @zindex-modal + 2;
+  }
+  img {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -16px;
+    margin-top: -16px;
+    z-index: @zindex-modal + 1;
+  }
+}
+
+.hl {
+  background-color: yellow;
+}
+
+.mb5 {
+  margin-bottom: 5px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.mb15 {
+  margin-bottom: 15px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.mt5 {
+  margin-top: 5px;
+}
+
+.mt10 {
+  margin-top: 10px;
+}
+
+.mt15 {
+  margin-top: 15px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.nav-faceted {
+  > li {
+    > a{
+      //padding: 7px 10px;
+    }
+    &.active > a {
+      &,
+      &:hover,
+      &:focus {
+        background-color: lighten(@gray-base, 75.0%);
+      }
+    }
+  }
+}
+
+.nav-sorted {
+  > li {
+    > a, > span {
+      display: block;
+      padding: 3px 10px;
+      &.title{
+        padding-left: 0;
+      }
+    }
+  }
+}
+
+.pager-top > .pagination{
+  margin-top: 0;
+}
