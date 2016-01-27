@@ -1,52 +1,51 @@
 "use strict";
-var async = require('asyncawait/async');
-var await = require('asyncawait/await');
+var async = require('co').wrap;
 var es = require('../es/client');
 var queries = require('./queries');
 var settings = require('../config/settings');
 
-var totalPostsByPhrase = async(function (q) {
-    var res = await(es.search({index: settings.WOBOT_INDEX_NAME, type: 'post', body: queries.aggs.totalPosts.byPhrase(q)}));
+var totalPostsByPhrase = async(function* (q) {
+    var res = yield es.search({index: settings.WOBOT_INDEX_NAME, type: 'post', body: queries.aggs.totalPosts.byPhrase(q)});
     return res.hits.total;
 });
 
-var totalPostsByQuery = async(function (q) {
-    var res = await(es.search({index: settings.WOBOT_INDEX_NAME, type: 'post', body: queries.aggs.totalPosts.byQuery(q)}));
+var totalPostsByQuery = async(function* (q) {
+    var res = yield es.search({index: settings.WOBOT_INDEX_NAME, type: 'post', body: queries.aggs.totalPosts.byQuery(q)});
     return res.hits.total;
 });
 
-var totalProfilesByPhrase = async(function (q) {
-    var res = await(es.search({index: settings.WOBOT_INDEX_NAME, type: 'profile', body: queries.aggs.totalProfiles.byPhrase(q)}));
+var totalProfilesByPhrase = async(function* (q) {
+    var res = yield es.search({index: settings.WOBOT_INDEX_NAME, type: 'profile', body: queries.aggs.totalProfiles.byPhrase(q)});
     return res.hits.total;
 });
 
-var totalProfilesByQuery = async(function (q) {
-    var res = await(es.search({index: settings.WOBOT_INDEX_NAME, type: 'profile', body: queries.aggs.totalProfiles.byQuery(q)}));
+var totalProfilesByQuery = async(function* (q) {
+    var res = yield es.search({index: settings.WOBOT_INDEX_NAME, type: 'profile', body: queries.aggs.totalProfiles.byQuery(q)});
     return res.hits.total;
 });
 
-var totalEngagementByPhrase = async(function (q) {
-    var res = await(es.search({index: settings.WOBOT_INDEX_NAME, type: 'post', body: queries.aggs.totalEngagement.byPhrase(q)}));
+var totalEngagementByPhrase = async(function* (q) {
+    var res = yield es.search({index: settings.WOBOT_INDEX_NAME, type: 'post', body: queries.aggs.totalEngagement.byPhrase(q)});
     return res.aggregations.engagement.value;
 });
 
-var totalEngagementByQuery = async(function (q) {
-    var res = await(es.search({index: settings.WOBOT_INDEX_NAME, type: 'post', body: queries.aggs.totalEngagement.byQuery(q)}));
+var totalEngagementByQuery = async(function* (q) {
+    var res = yield es.search({index: settings.WOBOT_INDEX_NAME, type: 'post', body: queries.aggs.totalEngagement.byQuery(q)});
     return res.aggregations.engagement.value;
 });
 
-var totalReachByPhrase = async(function (q) {
-    var res = await(es.search({index: settings.WOBOT_INDEX_NAME, type: 'profile', body: queries.aggs.totalReach.byPhrase(q)}));
+var totalReachByPhrase = async(function* (q) {
+    var res = yield es.search({index: settings.WOBOT_INDEX_NAME, type: 'profile', body: queries.aggs.totalReach.byPhrase(q)});
     return res.aggregations.reach.value;
 });
 
-var totalReachByQuery = async(function (q) {
-    var res = await(es.search({index: settings.WOBOT_INDEX_NAME, type: 'profile', body: queries.aggs.totalReach.byQuery(q)}));
+var totalReachByQuery = async(function* (q) {
+    var res = yield(es.search({index: settings.WOBOT_INDEX_NAME, type: 'profile', body: queries.aggs.totalReach.byQuery(q)}));
     return res.aggregations.reach.value;
 });
 
-var leaders = async(function(q){
-    var res = await(es.search({index: settings.WOBOT_INDEX_NAME, type: 'profile', body: queries.aggs.leaders(q)}));
+var leaders = async(function* (q){
+    var res = yield es.search({index: settings.WOBOT_INDEX_NAME, type: 'profile', body: queries.aggs.leaders(q)});
     var buckets = res.aggregations.agg_profile.buckets;
     var profiles = [];
     for (const bucket of buckets){
@@ -67,9 +66,9 @@ var leaders = async(function(q){
     return profiles;
 });
 
-var cities = async(function(q){
-    var posts = await(totalPostsByPhrase(q));
-    var res = await(es.search({index: settings.WOBOT_INDEX_NAME, type: 'profile', body: queries.aggs.cities(q)}));
+var cities = async(function* (q){
+    var posts = yield totalPostsByPhrase(q);
+    var res = yield es.search({index: settings.WOBOT_INDEX_NAME, type: 'profile', body: queries.aggs.cities(q)});
     var buckets = res.aggregations.agg_cities.buckets;
     var cities = [];
     for (const bucket of buckets){
@@ -86,8 +85,8 @@ var cities = async(function(q){
     return cities;
 });
 
-var sources = async(function(q){
-    var res = await(es.search({index: settings.WOBOT_INDEX_NAME, type: 'post', body: queries.aggs.sources(q)}));
+var sources = async(function* (q){
+    var res = yield es.search({index: settings.WOBOT_INDEX_NAME, type: 'post', body: queries.aggs.sources(q)});
     var buckets = res.aggregations.agg_source.buckets;
     var sources = [];
     for (const bucket of buckets){
