@@ -182,7 +182,8 @@ var leaders = function (q) {
         "aggs": {
             "agg_profile": {
                 "terms": {
-                    "field": "_uid",
+                    //"field": "_uid",
+                    "field": "id",
                     "size": 10,
                     "order": {
                         "agg_reach": "desc"
