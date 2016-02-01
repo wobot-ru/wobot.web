@@ -1,5 +1,6 @@
 "use strict";
 var _ = require('lodash');
+var moment = require('moment');
 
 var template = function (q) {
     return {
@@ -91,6 +92,28 @@ Builder.prototype.build = function () {
     if (!this._ignoreProfiles && Array.isArray(profiles) && profiles.length) {
         profileFilter.push({"ids": {"values": profiles}});
     }
+
+    var dateFilter;
+    if (q.filter.from){
+        let m = moment(q.filter.from, ['YYYY-MM-DDTHH:mm:ssZ', 'DD.MM.YYYY']);
+        if (m.isValid()){
+            dateFilter = dateFilter || {"range" : {"post_date" : {}}};
+            dateFilter.range.post_date.gte = m.toDate();
+        }
+    }
+
+    if (q.filter.to){
+        let m = moment(q.filter.to, ['YYYY-MM-DDTHH:mm:ssZ', 'DD.MM.YYYY']);
+        if (m.isValid()){
+            dateFilter = dateFilter || {"range" : {"post_date" : {}}};
+            dateFilter.range.post_date.lte = m.toDate();
+        }
+    }
+
+    if (dateFilter){
+        postFilter.push(dateFilter);
+    }
+
 
     return query;
 };

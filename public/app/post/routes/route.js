@@ -10,7 +10,10 @@
                     return postService;
                 }],
                 query: ['$stateParams', 'DefaultQuery', function ($stateParams, DefaultQuery) {
-                    return new DefaultQuery().extend($stateParams);
+                    var q = new DefaultQuery();
+                    //q.filter.from = moment().add(-3, 'month').format('DD.MM.YYYY');
+                    //q.filter.to = moment().format('DD.MM.YYYY');
+                    return q.extend($stateParams);
                 }],
                 model: ['$stateParams', 'service', 'query', function ($stateParams, service, query) {
                     return service.search(query);

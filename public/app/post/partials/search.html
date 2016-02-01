@@ -13,12 +13,29 @@
         </div>
     </div>
     <div ng-if="model.notFound">
-        Ничего не найдено для {{lastPhrase}}
+        <h4>По Вашему запросу ничего не найдено</h4>
     </div>
-    <div ng-if="model.posts.total">
-
+    <!--<div ng-if="model.posts.total">-->
+    <div>
         <div class="row">
             <div class="col-md-3">
+                <h4>Период</h4>
+                <div class="mb20">
+                    <div class="row">
+                        <div class="col-md-6" style="padding-right: 5px;">
+                            <input class="form-control" ng-enter="filter();" ng-date-picker="" ng-model="query.filter.from" type="text" placeholder="Начало">
+                        </div>
+                        <div class="col-md-6" style="padding-left: 5px;">
+                            <input class="form-control" ng-enter="filter();" ng-date-picker="" ng-model="query.filter.to" type="text" placeholder="Окончание">
+                        </div>
+                    </div>
+                    <div class="mt10">
+                        <button class="btn btn-primary btn-xs" ng-click="applyFilter();">
+                            <span class="fa fa-filter"></span>
+                            применить
+                        </button>
+                    </div>
+                </div>
                 <h4>Ресурсы</h4>
                 <ul class="nav nav-pills nav-faceted nav-stacked">
                     <li ng-class="{'active': sourceIsSelected(source.id)}" ng-repeat="source in model.aggs.sources">
@@ -54,7 +71,7 @@
                 </ul>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-9" ng-if="model.posts.total">
                 <div class="mb20">
                     <h4>
                         <span class="label label-primary">Упоминаний: {{model.aggs.totalPosts.byPhrase}}</span>

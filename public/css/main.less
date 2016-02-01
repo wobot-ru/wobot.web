@@ -1,6 +1,8 @@
 @import url('../../node_modules/bootstrap/less/bootstrap.less');
 @import url('../../node_modules/font-awesome/less/font-awesome.less');
 
+@images-path: "/public/img/";
+
 body {
   //min-height: 2000px;
   padding-top: 70px;
@@ -23,6 +25,13 @@ a{
     margin-top: -16px;
     z-index: @zindex-modal + 1;
   }
+}
+
+input.type-date {
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: right -29px;
+  background-image: url('@{images-path}input-date.png');
 }
 
 .hl {

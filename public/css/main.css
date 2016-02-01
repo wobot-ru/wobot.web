@@ -8846,6 +8846,12 @@ a {
   margin-top: -16px;
   z-index: 1051;
 }
+input.type-date {
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: right -29px;
+  background-image: url('/public/img/input-date.png');
+}
 .hl {
   background-color: yellow;
 }

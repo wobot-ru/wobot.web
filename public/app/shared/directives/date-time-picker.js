@@ -78,9 +78,9 @@
 
     }]);
 
-    module.directive('ngDatePicker', ['settings', 'timeHelper', function (settings, timeHelper) {
+    module.directive('ngDatePicker', ['settings', /*'timeHelper',*/ function (settings/*, timeHelper*/) {
         var defaults = {
-            format: settings.date_time_format,
+            format: settings.date_format,
             useCurrent: false,
             //sideBySide: true,
             showTodayButton: true,
@@ -99,7 +99,7 @@
                 });
 
                 //from model into view
-                ctrl.$formatters.unshift(function (value) {
+              /*  ctrl.$formatters.unshift(function (value) {
                     var oldVal = ctrl.$viewValue;
                     try {
                         return timeHelper.utcToLocal(value);
@@ -107,10 +107,10 @@
                     catch (err) {
                         return oldVal;
                     }
-                });
+                });*/
 
                 //view value to model
-                ctrl.$parsers.unshift(function (value) {
+               /* ctrl.$parsers.unshift(function (value) {
                     var oldVal = ctrl.$modelValue;
                     try {
                         return timeHelper.localToUtc(value);
@@ -119,7 +119,7 @@
                         //return oldVal;
                         return null;
                     }
-                });
+                });*/
 
             }
         };

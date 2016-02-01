@@ -1,4 +1,4 @@
 ;(function(moment){
     "use strict";
-    moment.locale('en');
+    moment.locale('ru');
 })(window.moment);
