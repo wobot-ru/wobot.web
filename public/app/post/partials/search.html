@@ -16,7 +16,7 @@
         <h4>По Вашему запросу ничего не найдено</h4>
     </div>
     <!--<div ng-if="model.posts.total">-->
-    <div>
+    <div ng-if="!model.emptyPhrase">
         <div class="row">
             <div class="col-md-3">
                 <h4>Период</h4>
@@ -33,6 +33,10 @@
                         <button class="btn btn-primary btn-xs" ng-click="applyFilter();">
                             <span class="fa fa-filter"></span>
                             применить
+                        </button>
+                        <button class="btn btn-default btn-xs" ng-click="clearDateFilter();">
+                            <span class="fa fa-times"></span>
+                            очистить
                         </button>
                     </div>
                 </div>
@@ -108,11 +112,11 @@
                     <a ng-href="{{post.href}}" target="_blank">
                         <div ng-bind-html="post.text | trusted" class="mb15"></div>
                     </a>
-                    <div class="row">
+                    <div class="row sign">
                         <div class="col-md-3">
                             Дата: <span ng-bind="post.post_date | date"></span>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             Юзер:
                             <a target="_blank" ng-href="{{post.profile.href}}">
                                 <span ng-bind="post.profile.name"></span> <span style="display: none;">{{post.profile_id}}</span>
@@ -124,7 +128,7 @@
                         <div class="col-md-2">
                             Охват: <span ng-bind="post.profile.reach"></span>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             Вовлеченность: <span ng-bind="post.engagement"></span>
                         </div>
                     </div>

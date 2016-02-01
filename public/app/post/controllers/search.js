@@ -51,6 +51,12 @@
             $scope.applyFilter();
         };
 
+        $scope.clearDateFilter = function(){
+            $scope.query.filter.from = null;
+            $scope.query.filter.to = null;
+            $scope.applyFilter();
+        };
+
         $scope.filterBySource = function(source){
             var sources = $scope.query.filter.sources = $scope.query.filter.sources || [];
             if (_.includes(sources, source)){
