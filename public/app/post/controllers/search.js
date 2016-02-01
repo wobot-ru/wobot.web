@@ -51,6 +51,13 @@
             $scope.applyFilter();
         };
 
+        $scope.filterByDate = function(){
+            $scope.query.filter.profiles = [];
+            $scope.query.filter.sources = [];
+            $scope.query.filter.cities = [];
+            $scope.applyFilter();
+        };
+
         $scope.clearDateFilter = function(){
             $scope.query.filter.from = null;
             $scope.query.filter.to = null;

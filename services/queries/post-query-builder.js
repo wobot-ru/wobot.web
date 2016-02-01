@@ -14,7 +14,7 @@ var template = function (q) {
                 "query": {
                     "bool": {
                         "must": [
-                            {
+                            /*{
                                 "has_parent": {
                                     "parent_type": "profile",
                                     "query": {
@@ -23,7 +23,7 @@ var template = function (q) {
                                         }
                                     }
                                 }
-                            }
+                            }*/
                         ]
                     }
                 }
@@ -72,7 +72,8 @@ Builder.prototype.build = function () {
 
     var query = template(q);
     var postFilter = query.bool.filter.query.bool.must;
-    var profileFilter = postFilter[0].has_parent.query.bool.must;
+    //var profileFilter = postFilter[0].has_parent.query.bool.must;
+    var profileFilter;
 
     if (this._boostPhrase) {
         query.bool.should = {"match_phrase": {"body.ru": q.filter.phrase}};
@@ -85,11 +86,13 @@ Builder.prototype.build = function () {
 
     var cities = q.filter.cities;
     if (!this._ignoreCities && Array.isArray(cities) && cities.length) {
+        profileFilter = profileFilter || [];
         profileFilter.push({"terms": {"city": cities}});
     }
 
     var profiles = q.filter.profiles;
     if (!this._ignoreProfiles && Array.isArray(profiles) && profiles.length) {
+        profileFilter = profileFilter || [];
         profileFilter.push({"ids": {"values": profiles}});
     }
 
@@ -112,6 +115,19 @@ Builder.prototype.build = function () {
 
     if (dateFilter){
         postFilter.push(dateFilter);
+    }
+
+    if (profileFilter){
+        postFilter.push({
+            "has_parent": {
+                "parent_type": "profile",
+                "query": {
+                    "bool": {
+                        "must": profileFilter
+                    }
+                }
+            }
+        })
     }
 
 
