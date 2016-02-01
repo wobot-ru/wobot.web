@@ -29,6 +29,9 @@ var postList = function (q) {
     if (order === 'engagement') {
         body.sort = [{'engagement': {'order': 'desc'}}];
     }
+    else if (order === 'date') {
+        body.sort = [{'post_date': {'order': 'desc'}}];
+    }
     else if (order === 'reach') {
         body.query.bool.must.push({
             "has_parent": {
