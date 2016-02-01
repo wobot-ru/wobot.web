@@ -1,4 +1,5 @@
 "use strict";
+var _ = require('lodash');
 var async = require('co').wrap;
 var es = require('../es/client');
 var queries = require('./queries');
@@ -66,6 +67,35 @@ var leaders = async(function* (q){
     return profiles;
 });
 
+var leaders2 = async(function* (q){
+    var take = 10;
+    var profileRes = yield es.search({index: settings.WOBOT_INDEX_NAME, type: 'profile', body: queries.aggs.leaders2(q, take)});
+    var profileHits = profileRes.hits.hits;
+    var profiles = [];
+    for (const hit of profileHits){
+        let profile = {};
+        let info = hit._source;
+        profile.id = hit._id;
+        profile.source = info.source;
+        profile.href = info.href;
+        profile.sm_profile_id = info.sm_profile_id;
+        profile.name = info.name;
+        profile.city = info.city;
+        profile.gender = info.gender;
+        profile.reach = info.reach;
+        profiles.push(profile)
+    }
+
+    var leaderIds = profiles.map(x => x.id);
+    var postsRes = yield es.search({index: settings.WOBOT_INDEX_NAME, type: 'post', body: queries.profile.relevantPostForProfiles(q, leaderIds, take)});
+    var profileBuckets = _.keyBy(postsRes.aggregations.agg_profile.buckets, 'key');
+
+    for (const profile of profiles){
+        profile.relevant_posts = profileBuckets[profile.id].doc_count;
+    }
+    return profiles;
+});
+
 var cities = async(function* (q){
     var posts = yield totalPostsByPhrase(q);
     var res = yield es.search({index: settings.WOBOT_INDEX_NAME, type: 'profile', body: queries.aggs.cities(q)});
@@ -101,22 +131,23 @@ var sources = async(function* (q){
 
 module.exports = {
     totalPosts:{
-        byPhrase: totalPostsByPhrase,
-        byQuery: totalPostsByQuery
+        byQuery: totalPostsByQuery,
+        byPhrase: totalPostsByPhrase
     },
     totalProfiles: {
-        byPhrase: totalProfilesByPhrase,
-        byQuery: totalProfilesByQuery
+        byQuery: totalProfilesByQuery,
+        byPhrase: totalProfilesByPhrase
     },
     totalReach: {
-        byPhrase: totalReachByPhrase,
-        byQuery: totalReachByQuery
+        byQuery: totalReachByQuery,
+        byPhrase: totalReachByPhrase
     },
     totalEngagement: {
-        byPhrase: totalEngagementByPhrase,
-        byQuery: totalEngagementByQuery
+        byQuery: totalEngagementByQuery,
+        byPhrase: totalEngagementByPhrase
     },
     leaders: leaders,
+    leaders2: leaders2,
     cities: cities,
     sources: sources
 };

@@ -26,10 +26,10 @@ var postList = function (q) {
     };
 
     var order = q.order.items[0].column;
-    if (order === 'engagement'){
+    if (order === 'engagement') {
         body.sort = [{'engagement': {'order': 'desc'}}];
     }
-    else if (order === 'reach'){
+    else if (order === 'reach') {
         body.query.bool.must.push({
             "has_parent": {
                 "parent_type": "profile",
@@ -68,8 +68,7 @@ var totalPostsByPhrase = function (q) {
     return {
         "size": 0,
         "query": postByPhrase(q) //queryPosts.postsByPhrase(q)
-}
-    ;
+    };
 };
 
 var totalPostsByQuery = function (q) {
@@ -219,6 +218,44 @@ var leaders = function (q) {
     }
 };
 
+var leaders2 = function (q, take) {
+    var query = new PostQueryBuilder(q).ignoreProfiles().build();
+    return {
+        "size": take,
+        "query": {
+            "has_child": {
+                "type": "post",
+                "query": query
+            }
+        },
+        "sort": [
+            {
+                "reach": {
+                    "order": "desc"
+                }
+            }
+        ]
+    };
+};
+
+var relevantPostForProfiles = function (q, profileIds, take) {
+    var query = postByPhrase(q);
+    var postFilter = query.bool.filter.query.bool.must;
+    postFilter.push({"terms": {"profile_id": profileIds}});
+    return {
+        "size": 0,
+        "query": query,
+        "aggs": {
+            "agg_profile": {
+                "terms": {
+                    "field": "profile_id",
+                    "size": take
+                }
+            }
+        }
+    };
+};
+
 var cities = function (q) {
     var query = new PostQueryBuilder(q).ignoreProfiles().ignoreCities().build();
     return {
@@ -278,7 +315,8 @@ module.exports = {
         search: postList
     },
     profile: {
-        byIds: profilesByIds
+        byIds: profilesByIds,
+        relevantPostForProfiles: relevantPostForProfiles
     },
     aggs: {
         totalPosts: {
@@ -298,6 +336,7 @@ module.exports = {
             byQuery: totalEngagementByQuery
         },
         leaders: leaders,
+        leaders2: leaders2,
         cities: cities,
         sources: sources
     }

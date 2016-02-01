@@ -42,22 +42,23 @@ var search = async(function* (query) {
         posts: posts,
         aggs: {
             totalPosts:{
-                byPhrase: yield aggsService.totalPosts.byPhrase(query),
-                byQuery: yield aggsService.totalPosts.byQuery(query)
+                //byQuery: yield aggsService.totalPosts.byQuery(query),
+                byPhrase: yield aggsService.totalPosts.byPhrase(query)
             },
             totalProfiles:{
-                byPhrase: yield aggsService.totalProfiles.byPhrase(query),
-                byQuery: yield aggsService.totalProfiles.byQuery(query)
+               // byQuery: yield aggsService.totalProfiles.byQuery(query),
+                byPhrase: yield aggsService.totalProfiles.byPhrase(query)
             },
             totalReach:{
-                byPhrase: yield aggsService.totalReach.byPhrase(query),
-                byQuery: yield aggsService.totalReach.byQuery(query)
+                //byQuery: yield aggsService.totalReach.byQuery(query),
+                byPhrase: yield aggsService.totalReach.byPhrase(query)
             },
             totalEngagement:{
-                byPhrase: yield aggsService.totalEngagement.byPhrase(query),
-                byQuery: yield aggsService.totalEngagement.byQuery(query)
+                //byQuery: yield aggsService.totalEngagement.byQuery(query),
+                byPhrase: yield aggsService.totalEngagement.byPhrase(query)
             },
-            leaders: yield aggsService.leaders(query),
+            //leaders: yield aggsService.leaders(query),
+            leaders: yield aggsService.leaders2(query),
             cities: yield aggsService.cities(query),
             sources: yield aggsService.sources(query)
         }
