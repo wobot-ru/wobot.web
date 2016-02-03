@@ -1,52 +1,20 @@
 "use strict";
 var PostQueryBuilder = require('./post-query-builder')
 
-var postList = function (q) {
+var list = function (q) {
     var query = new PostQueryBuilder(q).boostPhrase().build();
     //bug: Highlight not working in elasticsearch 2.1
     // https://github.com/elastic/elasticsearch/issues/14999
     var body = {
         "from": q.skip(),
         "size": q.take(),
-        "query": query/*,
-         "highlight": {
-         "pre_tags": [
-         "<hl class='hl'>"
-         ],
-         "post_tags": [
-         "</hl>"
-         ],
-         "fields": {
-         "body.ru": {
-         "fragment_size": 350,
-         "number_of_fragments": 3
-         }
-         }
-         }*/
+        "query": query
     };
 
-    var order = q.order.items[0].column;
-    if (order === 'engagement') {
-        body.sort = [{'engagement': {'order': 'desc'}}];
-    }
-    else if (order === 'date') {
-        body.sort = [{'post_date': {'order': 'desc'}}];
-    }
-    else if (order === 'reach') {
-        body.query.bool.must.push({
-            "has_parent": {
-                "parent_type": "profile",
-                "score_type": "score",
-                "query": {
-                    "function_score": {
-                        "script_score": {
-                            "script": "doc[\"reach\"].value"
-                        }
-                    }
-                }
-            }
-        })
-    }
+    var order_column = q.order.items[0].column;
+    var sort = {};
+    sort[order_column] = {'order': 'desc'};
+    body.sort = [sort];
     return body;
 };
 
@@ -63,14 +31,10 @@ var postByQuery = function (q) {
         .build();
 };
 
-var profilesByIds = function (ids, take) {
-    return {"size": take || 20, "query": {"ids": {"values": ids}}};
-};
-
 var totalPostsByPhrase = function (q) {
     return {
         "size": 0,
-        "query": postByPhrase(q) //queryPosts.postsByPhrase(q)
+        "query": postByPhrase(q)
     };
 };
 
@@ -84,10 +48,12 @@ var totalPostsByQuery = function (q) {
 var totalProfilesByPhrase = function (q) {
     return {
         "size": 0,
-        "query": {
-            "has_child": {
-                "type": "post",
-                "query": postByPhrase(q)
+        "query": postByPhrase(q),
+        "aggs": {
+            "profile_count": {
+                "cardinality": {
+                    "field": "profile_id"
+                }
             }
         }
     };
@@ -96,10 +62,12 @@ var totalProfilesByPhrase = function (q) {
 var totalProfilesByQuery = function (q) {
     return {
         "size": 0,
-        "query": {
-            "has_child": {
-                "type": "post",
-                "query": postByQuery(q)
+        "query": postByQuery(q),
+        "aggs": {
+            "profile_count": {
+                "cardinality": {
+                    "field": "profile_id"
+                }
             }
         }
     };
@@ -136,12 +104,7 @@ var totalEngagementByQuery = function (q) {
 var totalReachByPhrase = function (q) {
     return {
         "size": 0,
-        "query": {
-            "has_child": {
-                "type": "post",
-                "query": postByPhrase(q)
-            }
-        },
+        "query": postByPhrase(q),
         "aggs": {
             "reach": {
                 "sum": {
@@ -155,12 +118,7 @@ var totalReachByPhrase = function (q) {
 var totalReachByQuery = function (q) {
     return {
         "size": 0,
-        "query": {
-            "has_child": {
-                "type": "post",
-                "query": postByPhrase(q)
-            }
-        },
+        "query": postByQuery(q),
         "aggs": {
             "reach": {
                 "sum": {
@@ -175,44 +133,20 @@ var leaders = function (q) {
     var query = new PostQueryBuilder(q).ignoreProfiles().build();
     return {
         "size": 0,
-        "query": {
-            "has_child": {
-                "type": "post",
-                "query": query
-            }
-        },
+        "query": query,
         "aggs": {
             "agg_profile": {
                 "terms": {
-                    //"field": "_uid",
-                    "field": "id",
+                    "field": "reach",
                     "size": 10,
                     "order": {
-                        "agg_reach": "desc"
-                        //"agg_total_posts>agg_relevant_posts.doc_count": "desc"
+                        "_term": "desc"
                     }
                 },
                 "aggs": {
                     "agg_profile_info": {
                         "top_hits": {
                             "size": 1
-                        }
-                    },
-                    "agg_reach": {
-                        "sum": {
-                            "field": "reach"
-                        }
-                    },
-                    "agg_total_posts": {
-                        "children": {
-                            "type": "post"
-                        },
-                        "aggs": {
-                            "agg_relevant_posts": {
-                                "filter": {
-                                    "query": query
-                                }
-                            }
                         }
                     }
                 }
@@ -241,56 +175,18 @@ var leaders2 = function (q, take) {
     };
 };
 
-var relevantPostForProfiles = function (q, profileIds, take) {
-    var query = postByPhrase(q);
-    var postFilter = query.bool.filter.query.bool.must;
-    postFilter.push({"terms": {"profile_id": profileIds}});
-    return {
-        "size": 0,
-        "query": query,
-        "aggs": {
-            "agg_profile": {
-                "terms": {
-                    "field": "profile_id",
-                    "size": take
-                }
-            }
-        }
-    };
-};
+
 
 var cities = function (q) {
     var query = new PostQueryBuilder(q).ignoreProfiles().ignoreCities().build();
     return {
         "size": 0,
-        "query": {
-            "has_child": {
-                "type": "post",
-                "query": query
-            }
-        },
+        "query": query,
         "aggs": {
             "agg_cities": {
                 "terms": {
-                    "field": "city",
-                    "size": 10,
-                    "order": {
-                        "agg_total_posts>agg_relevant_posts.doc_count": "desc"
-                    }
-                },
-                "aggs": {
-                    "agg_total_posts": {
-                        "children": {
-                            "type": "post"
-                        },
-                        "aggs": {
-                            "agg_relevant_posts": {
-                                "filter": {
-                                    "query": query
-                                }
-                            }
-                        }
-                    }
+                    "field": "profile_city",
+                    "size": 10
                 }
             }
         }
@@ -315,11 +211,7 @@ var sources = function (q) {
 
 module.exports = {
     post: {
-        search: postList
-    },
-    profile: {
-        byIds: profilesByIds,
-        relevantPostForProfiles: relevantPostForProfiles
+        list: list
     },
     aggs: {
         totalPosts: {
@@ -339,7 +231,6 @@ module.exports = {
             byQuery: totalEngagementByQuery
         },
         leaders: leaders,
-        leaders2: leaders2,
         cities: cities,
         sources: sources
     }

@@ -7,24 +7,13 @@ var template = function (q) {
         "bool": {
             "must": [{
                 "match": {
-                    "body.ru": q.filter.phrase
+                    "post_body.ru": q.filter.phrase
                 }
             }],
             "filter": {
                 "query": {
                     "bool": {
-                        "must": [
-                            /*{
-                                "has_parent": {
-                                    "parent_type": "profile",
-                                    "query": {
-                                        "bool": {
-                                            "must": []
-                                        }
-                                    }
-                                }
-                            }*/
-                        ]
+                        "must": []
                     }
                 }
             }
@@ -71,29 +60,25 @@ Builder.prototype.build = function () {
     }
 
     var query = template(q);
-    var postFilter = query.bool.filter.query.bool.must;
-    //var profileFilter = postFilter[0].has_parent.query.bool.must;
-    var profileFilter;
+    var filter = query.bool.filter.query.bool.must;
 
     if (this._boostPhrase) {
-        query.bool.should = {"match_phrase": {"body.ru": q.filter.phrase}};
+        query.bool.should = {"match_phrase": {"post_body.ru": q.filter.phrase}};
     }
 
     var sources = q.filter.sources;
     if (!this._ignoreSources && Array.isArray(sources) && sources.length) {
-        postFilter.push({"terms": {"source": sources}});
+        filter.push({"terms": {"source": sources}});
     }
 
     var cities = q.filter.cities;
     if (!this._ignoreCities && Array.isArray(cities) && cities.length) {
-        profileFilter = profileFilter || [];
-        profileFilter.push({"terms": {"city": cities}});
+        filter.push({"terms": {"profile_city": cities}});
     }
 
     var profiles = q.filter.profiles;
     if (!this._ignoreProfiles && Array.isArray(profiles) && profiles.length) {
-        profileFilter = profileFilter || [];
-        profileFilter.push({"ids": {"values": profiles}});
+        filter.push({"terms": {"profile_id": profiles}});
     }
 
     var dateFilter;
@@ -114,22 +99,8 @@ Builder.prototype.build = function () {
     }
 
     if (dateFilter){
-        postFilter.push(dateFilter);
+        filter.push(dateFilter);
     }
-
-    if (profileFilter){
-        postFilter.push({
-            "has_parent": {
-                "parent_type": "profile",
-                "query": {
-                    "bool": {
-                        "must": profileFilter
-                    }
-                }
-            }
-        })
-    }
-
 
     return query;
 };

@@ -89,8 +89,8 @@
                             <li>
                                 <span class="title">Сортировать по</span>
                             </li>
-                            <li ng-class="{'active': isSortedBy('relevance')}">
-                                <a ng-click="sort('relevance')">Релевантности</a>
+                            <li ng-class="{'active': isSortedBy('_score')}">
+                                <a ng-click="sort('_score')">Релевантности</a>
                             </li>
                             <li ng-class="{'active': isSortedBy('reach')}">
                                 <a ng-click="sort('reach')">Охвату</a>
@@ -98,8 +98,8 @@
                             <li ng-class="{'active': isSortedBy('engagement')}">
                                 <a ng-click="sort('engagement')">Вовлеченности</a>
                             </li>
-                            <li ng-class="{'active': isSortedBy('date')}">
-                                <a ng-click="sort('date')">Дате поста</a>
+                            <li ng-class="{'active': isSortedBy('post_date')}">
+                                <a ng-click="sort('post_date')">Дате поста</a>
                             </li>
                         </ul>
                 </div>
@@ -109,7 +109,7 @@
                           ng-total="model.posts.total" ng-page-click="changePage(page)"></span>
                 </div>
                 <div ng-repeat="post in model.posts.items">
-                    <a ng-href="{{post.href}}" target="_blank">
+                    <a ng-href="{{post.post_href}}" target="_blank">
                         <div ng-bind-html="post.text | trusted" class="mb15"></div>
                     </a>
                     <div class="row sign">
@@ -118,15 +118,15 @@
                         </div>
                         <div class="col-md-3">
                             Юзер:
-                            <a target="_blank" ng-href="{{post.profile.href}}">
-                                <span ng-bind="post.profile.name"></span> <span style="display: none;">{{post.profile_id}}</span>
+                            <a target="_blank" ng-href="{{post.profile_href}}">
+                                <span ng-bind="post.profile_name"></span> <span style="display: none;">{{post.profile_id}}</span>
                             </a>
                         </div>
                         <div class="col-md-2">
-                            Город: <span ng-bind="post.profile.city"></span>
+                            Город: <span ng-bind="post.profile_city"></span>
                         </div>
                         <div class="col-md-2">
-                            Охват: <span ng-bind="post.profile.reach"></span>
+                            Охват: <span ng-bind="post.reach"></span>
                         </div>
                         <div class="col-md-2">
                             Вовлеченность: <span ng-bind="post.engagement"></span>

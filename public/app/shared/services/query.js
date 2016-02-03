@@ -20,7 +20,7 @@
 
     module.provider('DefaultOrder', function () {
         var DefaultOrder = function (sortColumn, sortOrder) {
-            this.items = [{column: sortColumn || 'relevance', dir: sortOrder || 'asc'}];
+            this.items = [{column: sortColumn || '_score', dir: sortOrder || 'desc'}];
            /* this.column = sortColumn || 'created';
             this.dir = sortOrder || 'asc';*/
         };
