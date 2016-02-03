@@ -54,7 +54,7 @@ var leaders = async(function* (q){
         let info_hit = bucket.agg_profile_info.hits.hits[0];
         let info = info_hit._source;
 
-        profile.id = info_hit.profile_id;
+        profile.id = info.profile_id;
         profile.source = info.source;
         profile.href = info.profile_href;
         profile.sm_profile_id = info.sm_profile_id;

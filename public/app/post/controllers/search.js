@@ -26,6 +26,11 @@
     });
 
     module.controller("PostListCtrl", ['$scope', '$controller', '$location', 'model', 'query', 'options', 'service', 'progress', function ($scope, $controller, $location, model, query, options, service, progress) {
+
+        if (model.posts && model.posts.total && model.posts.total > 10000){
+            model.posts.total = 10000;
+        }
+
         $scope.model = model;
         $scope.query = query;
         $scope.options = options;

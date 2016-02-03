@@ -1,7 +1,7 @@
 "use strict";
 var PostQueryBuilder = require('./post-query-builder')
 
-var list = function (q) {
+var postList = function (q) {
     var query = new PostQueryBuilder(q).boostPhrase().build();
     //bug: Highlight not working in elasticsearch 2.1
     // https://github.com/elastic/elasticsearch/issues/14999
@@ -155,28 +155,6 @@ var leaders = function (q) {
     }
 };
 
-var leaders2 = function (q, take) {
-    var query = new PostQueryBuilder(q).ignoreProfiles().build();
-    return {
-        "size": take,
-        "query": {
-            "has_child": {
-                "type": "post",
-                "query": query
-            }
-        },
-        "sort": [
-            {
-                "reach": {
-                    "order": "desc"
-                }
-            }
-        ]
-    };
-};
-
-
-
 var cities = function (q) {
     var query = new PostQueryBuilder(q).ignoreProfiles().ignoreCities().build();
     return {
@@ -211,7 +189,7 @@ var sources = function (q) {
 
 module.exports = {
     post: {
-        list: list
+        list: postList
     },
     aggs: {
         totalPosts: {

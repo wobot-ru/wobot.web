@@ -9,7 +9,7 @@ var hitToPost = function (hit, post, phrase) {
     post.sm_profile_id = hit._source.sm_profile_id;
     post.profile_name = hit._source.profile_name;
     post.profile_href = hit._source.profile_href;
-    post.profile_city = hit._source.profile_city;
+    post.profile_city = hit._source.profile_city || '(нет данных)';
     post.profile_gender = hit._source.profile_gender;
     post.profile_id = hit._source.profile_id;
 

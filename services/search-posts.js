@@ -1,13 +1,12 @@
 "use strict";
 var async = require('co').wrap;
-var _ = require('lodash');
 var es = require('../es/client');
 var mapper = require('./mappers/post');
 var aggsService = require('./aggregations');
 var queries = require('./queries');
 var settings = require('../config/settings.js');
 
-var findPosts = async(function* (q) {
+var  findPosts= async(function* (q) {
     var res = yield es.search({ index: settings.es.index, type: 'post', body: queries.post.list(q) });
     var total = res.hits.total;
     var hits = res.hits.hits;
@@ -44,7 +43,6 @@ var search = async(function* (query) {
                 //byQuery: yield aggsService.totalEngagement.byQuery(query),
                 byPhrase: yield aggsService.totalEngagement.byPhrase(query)
             },
-            //leaders: yield aggsService.leaders(query),
             leaders: yield aggsService.leaders(query),
             cities: yield aggsService.cities(query),
             sources: yield aggsService.sources(query)
