@@ -10,7 +10,7 @@ var  findPosts= async(function* (q) {
     var res = yield es.search({ index: settings.es.index, type: 'post', body: queries.post.list(q) });
     var total = res.hits.total;
     var hits = res.hits.hits;
-    var items = hits.map(hit => mapper.hitToPost(hit, null, q.filter.phrase));
+    var items = hits.map(hit => mapper.hitToPost(hit, null));
     return { total: total, items: items };
 });
 

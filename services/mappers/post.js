@@ -1,8 +1,7 @@
 "use strict";
 var striptags = require('striptags');
-var highlighter = require('../utils/highlighter');
 
-var hitToPost = function (hit, post, phrase) {
+var hitToPost = function (hit, post) {
     post = post || {};
     post.id = hit._id;
     post.profile_id = hit._source.profile_id;
@@ -13,10 +12,13 @@ var hitToPost = function (hit, post, phrase) {
     post.profile_gender = hit._source.profile_gender;
     post.profile_id = hit._source.profile_id;
 
-    var body = hit._source.post_body;
+    /*var body = hit._source.post_body;
     var text = striptags(body);
     var highlights = highlighter.highlight(text, phrase);
-    post.text = '...' + highlights.join('...') + '...';
+    post.text = '...' + highlights.join('...') + '...';*/
+
+    post.text = '...' + striptags(hit.highlight["post_body.ru"].join('...'), ['hl']) + '...';
+
     post.score = hit._score;
     post.source = hit._source.source;
     post.post_href = hit._source.post_href;

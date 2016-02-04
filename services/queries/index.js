@@ -4,11 +4,26 @@ var PostQueryBuilder = require('./post-query-builder')
 var postList = function (q) {
     var query = new PostQueryBuilder(q).boostPhrase().build();
     //bug: Highlight not working in elasticsearch 2.1
+    //(with has_parent query)
     // https://github.com/elastic/elasticsearch/issues/14999
     var body = {
         "from": q.skip(),
         "size": q.take(),
-        "query": query
+        "query": query,
+        "highlight": {
+            "pre_tags": [
+                "<hl class='hl'>"
+            ],
+            "post_tags": [
+                "</hl>"
+            ],
+            "fields": {
+                "post_body.ru": {
+                    "fragment_size": 300,
+                    "number_of_fragments": 3
+                }
+            }
+        }
     };
 
     var order_column = q.order.items[0].column;
