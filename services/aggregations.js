@@ -4,6 +4,7 @@ var async = require('co').wrap;
 var es = require('../es/client');
 var queries = require('./queries');
 var settings = require('../config/settings');
+var moment = require('moment');
 
 var totalPostsByPhrase = async(function* (q) {
     var res = yield es.search({index: settings.es.index, type: 'post', body: queries.aggs.totalPosts.byPhrase(q)});
@@ -45,11 +46,11 @@ var totalReachByQuery = async(function* (q) {
     return res.aggregations.reach.value;
 });
 
-var leaders = async(function* (q){
+var leaders = async(function* (q) {
     var res = yield es.search({index: settings.es.index, type: 'post', body: queries.aggs.leaders(q)});
     var buckets = res.aggregations.agg_profile.buckets;
     var profiles = [];
-    for (const bucket of buckets){
+    for (const bucket of buckets) {
         let profile = {};
         let info_hit = bucket.agg_profile_info.hits.hits[0];
         let info = info_hit._source;
@@ -68,17 +69,17 @@ var leaders = async(function* (q){
     return profiles;
 });
 
-var cities = async(function* (q){
+var cities = async(function* (q) {
     var posts = yield totalPostsByPhrase(q);
     var res = yield es.search({index: settings.es.index, type: 'post', body: queries.aggs.cities(q)});
     var buckets = res.aggregations.agg_cities.buckets;
     var cities = [];
-    for (const bucket of buckets){
+    for (const bucket of buckets) {
         let city = {};
         city.id = bucket.key;
         city.name = bucket.key || "(нет данных)";
         city.relevant_posts = bucket.doc_count;
-        if (posts){
+        if (posts) {
             city.fraction = city.relevant_posts / posts;
         }
         cities.push(city);
@@ -86,11 +87,11 @@ var cities = async(function* (q){
     return cities;
 });
 
-var sources = async(function* (q){
+var sources = async(function* (q) {
     var res = yield es.search({index: settings.es.index, type: 'post', body: queries.aggs.sources(q)});
     var buckets = res.aggregations.agg_source.buckets;
     var sources = [];
-    for (const bucket of buckets){
+    for (const bucket of buckets) {
         let source = {};
         source.id = bucket.key;
         source.name = bucket.key || "(нет данных)";
@@ -100,8 +101,34 @@ var sources = async(function* (q){
     return sources;
 });
 
+var lastPostDate = async(function*(q) {
+    var res = yield es.search({index: settings.es.index, type: 'post', body: queries.aggs.lastPostDate(q)});
+    return res.aggregations.agg_last_date.value;
+});
+
+var postTimeSeries= async(function*(q){
+    var to = yield lastPostDate(q);
+    to = to || new Date().getTime();
+
+    q.filter.from = moment(to).subtract(9, 'days').startOf('day');
+    q.filter.to = moment(to).endOf('day');
+
+    var res = yield es.search({index: settings.es.index, type: 'post', body: queries.aggs.postSeries(q)});
+    var buckets = res.aggregations.agg_total.buckets;
+
+    return {
+        posts: buckets.map(x => [x.key, x.doc_count]),
+        profiles: buckets.map(x => [x.key, x.agg_profiles.value]),
+        reach: buckets.map(x => [x.key, x.agg_reach.value]),
+        engagement: buckets.map(x => [x.key, x.agg_engagement.value])
+    }
+});
+
+
+
+
 module.exports = {
-    totalPosts:{
+    totalPosts: {
         byQuery: totalPostsByQuery,
         byPhrase: totalPostsByPhrase
     },
@@ -119,5 +146,6 @@ module.exports = {
     },
     leaders: leaders,
     cities: cities,
-    sources: sources
+    sources: sources,
+    postTimeSeries:postTimeSeries
 };

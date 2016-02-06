@@ -201,6 +201,69 @@ var sources = function (q) {
     };
 };
 
+var lastPostDate = function (q) {
+    var query = new PostQueryBuilder(q)
+        .ignoreDates()
+        .ignoreCities()
+        .ignoreProfiles()
+        .ignoreSources()
+        .build();
+
+    return {
+        "size": 0,
+        "query": query,
+        "aggs": {
+            "agg_last_date":{
+                "max": {
+                    "field": "post_date"
+                }
+            }
+        }
+    };
+};
+
+var postSeries = function(q){
+    var query = new PostQueryBuilder(q)
+        .ignoreCities()
+        .ignoreProfiles()
+        .ignoreSources()
+        .build();
+
+    return {
+        "size": 0,
+        "query": query,
+        "aggs": {
+            "agg_total": {
+                "date_histogram": {
+                    "field": "post_date",
+                    "interval": "day",
+                    "min_doc_count": 0,
+                    "time_zone": "+03:00"
+                },
+                "aggs": {
+                    "agg_reach": {
+                        "sum": {
+                            "field": "reach"
+                        }
+                    },
+                    "agg_engagement":{
+                        "sum": {
+                            "field": "engagement"
+                        }
+                    },
+                    "agg_profiles":{
+                        "cardinality": {
+                            "field": "profile_id"
+                        }
+                    }
+                }
+            }
+        }
+    };
+};
+
+
+
 
 module.exports = {
     post: {
@@ -223,6 +286,8 @@ module.exports = {
             byPhrase: totalEngagementByPhrase,
             byQuery: totalEngagementByQuery
         },
+        lastPostDate: lastPostDate,
+        postSeries: postSeries,
         leaders: leaders,
         cities: cities,
         sources: sources

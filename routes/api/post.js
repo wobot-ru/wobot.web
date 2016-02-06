@@ -2,13 +2,26 @@
 
 var router = require('express').Router();
 var moment = require('moment');
-var service = require('../../services/search-posts');
+var postService = require('../../services/search-posts');
+var aggService = require('../../services/aggregations');
 var Query = require('../../models/query');
 
 router.get('/search', function (req, res, next) {
     var query = new Query(req.query.q);
 
-    var action = service.search(query);
+    var action = postService.search(query);
+    action.then(function (data) {
+        return res.json(data);
+    });
+    action.catch(function (err) {
+        return next(err)
+    });
+});
+
+router.get('/time-series', function (req, res, next) {
+    var query = new Query(req.query.q);
+
+    var action = aggService.postTimeSeries(query);
     action.then(function (data) {
         return res.json(data);
     });

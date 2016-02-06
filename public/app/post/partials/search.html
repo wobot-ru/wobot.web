@@ -78,10 +78,10 @@
             <div class="col-md-9" ng-if="model.posts.total">
                 <div class="mb20">
                     <h4>
-                        <span class="label label-primary">Упоминаний: {{model.aggs.totalPosts.byPhrase}}</span>
-                        <span class="label label-primary">Авторов: {{model.aggs.totalProfiles.byPhrase}}</span>
-                        <span class="label label-primary">Охват: {{model.aggs.totalReach.byPhrase}}</span>
-                        <span class="label label-primary">Вовлеченность: {{model.aggs.totalEngagement.byPhrase}}</span>
+                        <span ng-click="postsChart();" class="label label-primary pointer">Упоминаний: {{model.aggs.totalPosts.byPhrase}}</span>
+                        <span ng-click="profilesChart();" class="label label-primary pointer">Авторов: {{model.aggs.totalProfiles.byPhrase}}</span>
+                        <span ng-click="reachChart();" class="label label-primary pointer">Охват: {{model.aggs.totalReach.byPhrase}}</span>
+                        <span ng-click="engagementChart();" class="label label-primary pointer">Вовлеченность: {{model.aggs.totalEngagement.byPhrase}}</span>
                     </h4>
                 </div>
                 <div class="mb20">
@@ -145,3 +145,4 @@
 
     </div>
 </div>
+<div data-ui-view="" data-autoscroll="false"></div>

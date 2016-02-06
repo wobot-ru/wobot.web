@@ -8,6 +8,9 @@
         return {
             search: function (query) {
                 return httpService.get(url('search'), { params: { q: query } });
+            },
+            timeSeries: function(query){
+                return httpService.get(url('time-series'), { params: { q: query } });
             }
         };
 

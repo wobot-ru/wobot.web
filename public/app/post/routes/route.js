@@ -1,8 +1,8 @@
 ;(function (module) {
     "use strict";
-    module.config(['$stateProvider', function($stateProvider) {
+    module.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
         $stateProvider.state('search', {
-            url: '?q',
+            url: '/search?q',
             templateUrl: '/public/app/post/partials/search.html',
             controller: 'PostListCtrl',
             resolve: {
@@ -26,6 +26,30 @@
                 }]
             }
         });
+
+        $stateProvider.state('search.chart', {
+            url: '/chart?metric',
+            templateUrl: '/public/app/post/partials/chart.html',
+            controller: 'PostChartCtrl',
+            resolve: {
+                model: ['$stateParams', 'postService', 'query', function ($stateParams, postService, query) {
+                    return postService.timeSeries(query);
+                }],
+                metric:['$stateParams', function($stateParams){
+                    return $stateParams.metric;
+                }],
+                closeFn:['$state', '$stateParams', function ($state, $stateParams) {
+                    return function () {
+                        $state.go('search', {q: $stateParams.q});
+                    };
+                }]
+            }
+        });
+
+        $urlRouterProvider.when('', ['$state', function ($state) {
+            $state.go('search');
+        }]);
+
     }]);
 
 })(window.app);

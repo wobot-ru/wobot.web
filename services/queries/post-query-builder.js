@@ -30,24 +30,30 @@ var Builder = function (q) {
     this._ignoreSources = false;
     this._ignoreCities = false;
     this._ignoreProfiles = false;
+    this._ignoreDates = false;
 };
 
-Builder.prototype.boostPhrase = function(){
+Builder.prototype.boostPhrase = function () {
     this._boostPhrase = true;
     return this;
 };
 
-Builder.prototype.ignoreSources = function(){
+Builder.prototype.ignoreSources = function () {
     this._ignoreSources = true;
     return this;
 };
 
-Builder.prototype.ignoreCities = function(){
+Builder.prototype.ignoreCities = function () {
     this._ignoreCities = true;
     return this;
 };
 
-Builder.prototype.ignoreProfiles = function(){
+Builder.prototype.ignoreDates = function () {
+    this._ignoreDates = true;
+    return this;
+};
+
+Builder.prototype.ignoreProfiles = function () {
     this._ignoreProfiles = true;
     return this;
 };
@@ -81,25 +87,27 @@ Builder.prototype.build = function () {
         filter.push({"terms": {"profile_id": profiles}});
     }
 
-    var dateFilter;
-    if (q.filter.from){
-        let m = moment(q.filter.from, ['YYYY-MM-DDTHH:mm:ssZ', 'DD.MM.YYYY']);
-        if (m.isValid()){
-            dateFilter = dateFilter || {"range" : {"post_date" : {}}};
-            dateFilter.range.post_date.gte = m.toDate();
+    if (!this._ignoreDates) {
+        var dateFilter;
+        if (q.filter.from) {
+            let m = moment(q.filter.from, ['YYYY-MM-DDTHH:mm:ssZ', 'DD.MM.YYYY']);
+            if (m.isValid()) {
+                dateFilter = dateFilter || {"range": {"post_date": {}}};
+                dateFilter.range.post_date.gte = m.startOf('day').utc().toDate();
+            }
         }
-    }
 
-    if (q.filter.to){
-        let m = moment(q.filter.to, ['YYYY-MM-DDTHH:mm:ssZ', 'DD.MM.YYYY']);
-        if (m.isValid()){
-            dateFilter = dateFilter || {"range" : {"post_date" : {}}};
-            dateFilter.range.post_date.lte = m.toDate();
+        if (q.filter.to) {
+            let m = moment(q.filter.to, ['YYYY-MM-DDTHH:mm:ssZ', 'DD.MM.YYYY']);
+            if (m.isValid()) {
+                dateFilter = dateFilter || {"range": {"post_date": {}}};
+                dateFilter.range.post_date.lte = m.endOf('day').utc().toDate();
+            }
         }
-    }
 
-    if (dateFilter){
-        filter.push(dateFilter);
+        if (dateFilter) {
+            filter.push(dateFilter);
+        }
     }
 
     return query;

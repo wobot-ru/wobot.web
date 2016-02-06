@@ -25,7 +25,7 @@
         };
     });
 
-    module.controller("PostListCtrl", ['$scope', '$controller', '$location', 'model', 'query', 'options', 'service', 'progress', function ($scope, $controller, $location, model, query, options, service, progress) {
+    module.controller("PostListCtrl", ['$scope', '$controller', '$location', '$state', 'model', 'query', 'options', 'service', 'progress', function ($scope, $controller, $location,$state, model, query, options, service, progress) {
 
         if (model.posts && model.posts.total && model.posts.total > 10000){
             model.posts.total = 10000;
@@ -134,6 +134,22 @@
         $scope.isSortedBy = function(column){
             var order = $scope.query.order.items[0];
             return (order.column === column);
+        };
+
+        $scope.postsChart = function(){
+            $state.go('search.chart', {q:  JSON.stringify($scope.query), metric: 'posts'});
+        };
+
+        $scope.profilesChart = function(){
+            $state.go('search.chart', {q:  JSON.stringify($scope.query), metric: 'profiles'});
+        };
+
+        $scope.reachChart = function(){
+            $state.go('search.chart', {q:  JSON.stringify($scope.query), metric: 'reach'});
+        };
+
+        $scope.engagementChart = function(){
+            $state.go('search.chart', {q:  JSON.stringify($scope.query), metric: 'engagement'});
         };
 
     }]);
