@@ -91,7 +91,12 @@ var leaders2 = async(function* (q){
     var profileBuckets = _.keyBy(postsRes.aggregations.agg_profile.buckets, 'key');
 
     for (const profile of profiles){
-        profile.relevant_posts = profileBuckets[profile.id].doc_count;
+        if (profileBuckets.hasOwnProperty(profile.id)){
+            profile.relevant_posts = profileBuckets[profile.id].doc_count;
+        }
+        else {
+            profile.relevant_posts = 0;
+        }
     }
     return profiles;
 });
