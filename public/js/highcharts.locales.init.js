@@ -1,10 +1,26 @@
-;(function(Highcharts){
+;(function (Highcharts) {
     "use strict";
     Highcharts.setOptions({
         lang: {
-            months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',  'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-            shortMonths: ['янв', 'фев', 'март', 'апр', 'май', 'июнь',  'июль', 'авг', 'сен', 'окт', 'нояб', 'дек'],
-            weekdays: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
+            loading: 'Загрузка...',
+            months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+            weekdays: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
+            shortMonths: ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сент', 'Окт', 'Нояб', 'Дек'],
+            exportButtonTitle: "Экспорт",
+            printButtonTitle: "Печать",
+            rangeSelectorFrom: "С",
+            rangeSelectorTo: "По",
+            rangeSelectorZoom: "Период",
+            downloadPNG: 'Скачать PNG',
+            downloadJPEG: 'Скачать JPEG',
+            downloadPDF: 'Скачать PDF',
+            downloadSVG: 'Скачать SVG',
+            printChart: 'Напечатать график'
+        },
+        tooltip: {
+            dateTimeLabelFormats: {
+                week: 'Неделя c %A, %b %e, %Y'
+            }
         },
         global: {
             //getTimezoneOffset: func...

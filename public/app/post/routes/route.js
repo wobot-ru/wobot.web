@@ -28,15 +28,18 @@
         });
 
         $stateProvider.state('search.chart', {
-            url: '/chart?metric',
+            url: '/chart?metric&interval',
             templateUrl: '/public/app/post/partials/chart.html',
             controller: 'PostChartCtrl',
             resolve: {
                 model: ['$stateParams', 'postService', 'query', function ($stateParams, postService, query) {
-                    return postService.timeSeries(query);
+                    return postService.timeSeries(query, $stateParams.interval);
                 }],
                 metric:['$stateParams', function($stateParams){
                     return $stateParams.metric;
+                }],
+                interval:['$stateParams', function($stateParams){
+                    return $stateParams.interval;
                 }],
                 closeFn:['$state', '$stateParams', function ($state, $stateParams) {
                     return function () {

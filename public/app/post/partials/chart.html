@@ -8,11 +8,18 @@
             <div class="modal-body">
                 <div id="chart" style="width:100%;height:400px;"></div>
 
-                <div class="buttons bottom">
-                    <a class="btn btn-default btn-sm" ng-class="{active: currentMetric === 'posts'}" ng-click="renderPosts();">Упоминания</a>
-                    <a class="btn btn-default btn-sm" ng-class="{active: currentMetric === 'profiles'}" ng-click="renderProfiles();">Авторы</a>
-                    <a class="btn btn-default btn-sm" ng-class="{active: currentMetric === 'reach'}" ng-click="renderReach();">Охват</a>
-                    <a class="btn btn-default btn-sm" ng-class="{active: currentMetric === 'engagement'}" ng-click="renderEngagement();">Вовлеченность</a>
+                <div class="mt10 clearfix">
+                    <div class="pull-left">
+                        <a class="btn btn-default btn-sm" ng-class="{active: currentMetric === 'posts'}" ng-click="renderPosts();">Упоминания</a>
+                        <a class="btn btn-default btn-sm" ng-class="{active: currentMetric === 'profiles'}" ng-click="renderProfiles();">Авторы</a>
+                        <a class="btn btn-default btn-sm" ng-class="{active: currentMetric === 'reach'}" ng-click="renderReach();">Охват</a>
+                        <a class="btn btn-default btn-sm" ng-class="{active: currentMetric === 'engagement'}" ng-click="renderEngagement();">Вовлеченность</a>
+                    </div>
+                    <div class="pull-right">
+                        <a class="btn btn-default btn-sm" ng-class="{active: currentInterval === 'd'}" ng-click="byDay();">{{strInterval('d')}}</a>
+                        <a class="btn btn-default btn-sm" ng-class="{active: currentInterval === 'w'}" ng-click="byWeek();">{{strInterval('w')}}</a>
+                        <a class="btn btn-default btn-sm" ng-class="{active: currentInterval === 'm'}" ng-click="byMonth();">{{strInterval('m')}}</a>
+                    </div>
                 </div>
 
             </div>

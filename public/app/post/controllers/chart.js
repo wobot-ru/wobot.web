@@ -69,21 +69,35 @@
         });
     };
 
-    module.controller("PostChartCtrl", ['$scope', '$location', 'model', 'query', 'metric', 'options', 'closeFn', 'service', 'progress', function ($scope, $location, model, query, metric, options, closeFn, service, progress) {
+    var INTERVALS = {
+        'd': 'дней',
+        'w': 'недель',
+        'm': 'месяцев'
+    };
+
+    var INTERVAL_NUM = 10;
+
+    module.controller("PostChartCtrl", ['$scope', '$location', '$state', 'model', 'query', 'metric', 'interval', 'options', 'closeFn', 'service', 'progress', function ($scope, $location, $state, model, query, metric, interval, options, closeFn, service, progress) {
         $scope.model = model;
         $scope.query = query;
         $scope.options = options;
         $scope.currentUrl = $location.url();
 
+        $scope.currentInterval = interval || 'd';
+
         $scope.close = function () {
             closeFn();
+        };
+
+        $scope.strInterval = function (i) {
+            return INTERVAL_NUM + ' ' + INTERVALS[i];
         };
 
         $scope.renderPosts = function () {
             $scope.currentMetric = 'posts';
             renderChart({
                 data: $scope.model.posts,
-                title: "Упоминания",
+                title: "Количество упоминаний за последние " + $scope.strInterval($scope.currentInterval),
                 yAxisTitle: 'Упоминания',
                 seriesName: "Упоминания"
             });
@@ -94,7 +108,7 @@
             $scope.currentMetric = 'profiles';
             renderChart({
                 data: $scope.model.profiles,
-                title: "Авторы",
+                title: "Количество авторов за последние " + $scope.strInterval($scope.currentInterval),
                 yAxisTitle: 'Авторы',
                 seriesName: "Авторы"
             });
@@ -104,7 +118,7 @@
             $scope.currentMetric = 'reach';
             renderChart({
                 data: $scope.model.reach,
-                title: "Охват",
+                title: "Охват за последние " + $scope.strInterval($scope.currentInterval),
                 yAxisTitle: 'Охват',
                 seriesName: "Охват"
             });
@@ -114,18 +128,29 @@
             $scope.currentMetric = 'engagement';
             renderChart({
                 data: $scope.model.engagement,
-                title: "Вовлеченность",
+                title: "Вовлеченность за последние " + $scope.strInterval($scope.currentInterval),
                 yAxisTitle: 'Вовлеченность',
                 seriesName: "Вовлеченность"
             });
         };
 
-        $scope.render = function(metric){
+        $scope.render = function (metric) {
             if (metric === 'posts') return $scope.renderPosts();
             if (metric === 'profiles') return $scope.renderProfiles();
             if (metric === 'reach') return $scope.renderReach();
             if (metric === 'engagement') return $scope.renderEngagement();
             return $scope.renderPosts();
+        };
+
+        $scope.byDay = function () {
+            $state.go('search.chart', {q: JSON.stringify($scope.query), metric: $scope.currentMetric, interval: 'd'});
+        };
+
+        $scope.byWeek = function () {
+            $state.go('search.chart', {q: JSON.stringify($scope.query), metric: $scope.currentMetric, interval: 'w'});
+        };
+        $scope.byMonth = function () {
+            $state.go('search.chart', {q: JSON.stringify($scope.query), metric: $scope.currentMetric, interval: 'm'});
         };
 
         $scope.render(metric);

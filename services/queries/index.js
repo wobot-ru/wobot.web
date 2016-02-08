@@ -222,7 +222,8 @@ var lastPostDate = function (q) {
     };
 };
 
-var postSeries = function(q){
+var postSeries = function(q, interval){
+
     var query = new PostQueryBuilder(q)
         .ignoreCities()
         .ignoreProfiles()
@@ -236,7 +237,7 @@ var postSeries = function(q){
             "agg_total": {
                 "date_histogram": {
                     "field": "post_date",
-                    "interval": "day",
+                    "interval": interval,
                     "min_doc_count": 0,
                     "time_zone": "+03:00"
                 },

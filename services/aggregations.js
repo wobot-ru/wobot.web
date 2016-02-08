@@ -106,14 +106,25 @@ var lastPostDate = async(function*(q) {
     return res.aggregations.agg_last_date.value;
 });
 
-var postTimeSeries= async(function*(q){
+var postTimeSeries= async(function*(q, interval){
+
+    var parseInterval = function(interval){
+        if (interval === 'd') return 'day';
+        if (interval === 'w') return 'week';
+        if (interval === 'm') return 'month';
+        return 'day';
+    };
+
+    interval = parseInterval(interval);
+
     var to = yield lastPostDate(q);
     to = to || new Date().getTime();
 
-    q.filter.from = moment(to).subtract(9, 'days').startOf('day');
     q.filter.to = moment(to).endOf('day');
+    q.filter.from = moment(q.filter.to).subtract(9, interval + 's').startOf('day');
 
-    var res = yield es.search({index: settings.es.index, type: 'post', body: queries.aggs.postSeries(q)});
+
+    var res = yield es.search({index: settings.es.index, type: 'post', body: queries.aggs.postSeries(q, interval)});
     var buckets = res.aggregations.agg_total.buckets;
 
     return {
