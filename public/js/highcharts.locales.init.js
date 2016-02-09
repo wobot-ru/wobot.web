@@ -25,6 +25,9 @@
         global: {
             //getTimezoneOffset: func...
             useUTC: false
+        },
+        credits: {
+            enabled: false
         }
     });
 })(window.Highcharts);

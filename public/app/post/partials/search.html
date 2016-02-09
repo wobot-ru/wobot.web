@@ -45,8 +45,9 @@
                     <li ng-class="{'active': sourceIsSelected(source.id)}" ng-repeat="source in model.aggs.sources">
                         <a href="javascript:void(0);" ng-click="filterBySource(source.id);">
                             {{source.name}}
-                            <span title="Количество упоминаний"
-                                  class="label label-primary">{{source.relevant_posts}}</span>
+                            <span title="Количество упоминаний" class="label label-primary">
+                                {{source.relevant_posts}}
+                            </span>
                         </a>
                     </li>
                 </ul>
@@ -89,16 +90,16 @@
                             <li>
                                 <span class="title">Сортировать по</span>
                             </li>
-                            <li ng-class="{'active': isSortedBy('_score')}">
-                                <a ng-click="sort('_score')">Релевантности</a>
+                            <li ng-class="sortState('_score')">
+                                <a ng-click="sort('_score')">Релевантности<!--<i class="fa fa-arrow-up"></i>--></a>
                             </li>
-                            <li ng-class="{'active': isSortedBy('reach')}">
+                            <li ng-class="sortState('reach');">
                                 <a ng-click="sort('reach')">Охвату</a>
                             </li>
-                            <li ng-class="{'active': isSortedBy('engagement')}">
+                            <li ng-class="sortState('engagement');">
                                 <a ng-click="sort('engagement')">Вовлеченности</a>
                             </li>
-                            <li ng-class="{'active': isSortedBy('post_date')}">
+                            <li ng-class="sortState('post_date');">
                                 <a ng-click="sort('post_date')">Дате поста</a>
                             </li>
                         </ul>

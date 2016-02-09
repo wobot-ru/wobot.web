@@ -53,6 +53,7 @@
         $scope.searchByPhrase = function(){
             var phrase = $scope.query.filter.phrase;
             $scope.query.filter = {phrase: phrase};
+            $scope.query.order.items = [{column: '_score', dir: 'desc'}];
             $scope.applyFilter();
         };
 
@@ -125,15 +126,26 @@
         };
 
         $scope.sort = function (column) {
-            var order = $scope.query.order.items[0];
-            order.column = column;
-            order.dir = 'asc';
+            var currOrder = $scope.query.order.items[0];
+            if (currOrder.column === column) {
+                if (currOrder.dir === 'asc') {
+                    currOrder.dir = 'desc';
+                } else {
+                    currOrder.dir = 'asc';
+                }
+            } else {
+                currOrder.column = column;
+                currOrder.dir = 'desc';
+            }
             $scope.reload();
         };
 
-        $scope.isSortedBy = function(column){
-            var order = $scope.query.order.items[0];
-            return (order.column === column);
+        $scope.sortState = function (column) {
+            var order = _.find($scope.query.order.items, function(x){return x.column === column;});
+            if (order) {
+                return 'active ' + order.dir;
+            }
+            return null;
         };
 
         $scope.postsChart = function(){

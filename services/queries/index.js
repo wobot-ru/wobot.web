@@ -26,9 +26,10 @@ var postList = function (q) {
         }
     };
 
-    var order_column = q.order.items[0].column;
+    var order = q.order.items[0];
+
     var sort = {};
-    sort[order_column] = {'order': 'desc'};
+    sort[order.column] = {'order': order.dir};
     body.sort = [sort];
     return body;
 };
