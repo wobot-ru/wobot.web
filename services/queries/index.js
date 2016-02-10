@@ -244,14 +244,15 @@ var leaders2 = function (q, take) {
 var relevantPostForProfiles = function (q, profileIds, take) {
     var query = postByPhrase(q);
     var postFilter = query.bool.filter.query.bool.must;
-    postFilter.push({"terms": {"profile_id": profileIds}});
+    postFilter.push({"terms": {"_parent": profileIds}});
     return {
         "size": 0,
         "query": query,
         "aggs": {
             "agg_profile": {
                 "terms": {
-                    "field": "profile_id",
+                    //"field": "profile_id",
+                    "field": "_parent",
                     "size": take
                 }
             }
