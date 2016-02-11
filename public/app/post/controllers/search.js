@@ -164,5 +164,9 @@
             $state.go('search.chart', {q:  JSON.stringify($scope.query), metric: 'engagement'});
         };
 
+        $scope.citiesChart = function(){
+            $state.go('search.chartCities', {q:  JSON.stringify($scope.query)});
+        };
+
     }]);
 })(window.app, window._);

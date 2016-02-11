@@ -29,4 +29,15 @@ router.get('/time-series', function (req, res, next) {
     });
 });
 
+router.get('/by-cities', function (req, res, next) {
+    var query = new Query(req.query.q);
+    var action = aggService.postsByCities(query);
+    action.then(function (data) {
+        return res.json(data);
+    });
+    action.catch(function (err) {
+        return next(err)
+    });
+});
+
 module.exports = router;

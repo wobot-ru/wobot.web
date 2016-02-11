@@ -171,7 +171,8 @@ var leaders = function (q) {
     }
 };
 
-var cities = function (q) {
+var cities = function (q, take) {
+    take = take || 10;
     var query = new PostQueryBuilder(q).ignoreProfiles().ignoreCities().build();
     return {
         "size": 0,
@@ -180,7 +181,7 @@ var cities = function (q) {
             "agg_cities": {
                 "terms": {
                     "field": "profile_city",
-                    "size": 10
+                    "size": take
                 }
             }
         }

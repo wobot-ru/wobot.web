@@ -70,8 +70,8 @@ var leaders = async(function* (q) {
 });
 
 var cities = async(function* (q) {
-    var posts = yield totalPostsByPhrase(q);
     var res = yield es.search({index: settings.es.index, type: 'post', body: queries.aggs.cities(q)});
+    var total = res.hits.total;
     var buckets = res.aggregations.agg_cities.buckets;
     var cities = [];
     for (const bucket of buckets) {
@@ -79,13 +79,34 @@ var cities = async(function* (q) {
         city.id = bucket.key;
         city.name = bucket.key || "(нет данных)";
         city.relevant_posts = bucket.doc_count;
-        if (posts) {
-            city.fraction = city.relevant_posts / posts;
+        if (total) {
+            city.fraction = city.relevant_posts / total;
         }
         cities.push(city);
     }
     return cities;
 });
+
+var postsByCities = async(function* (q) {
+    var res = yield es.search({index: settings.es.index, type: 'post', body: queries.aggs.cities(q, 30)});
+    var total = res.hits.total;
+    var curr = 0;
+    var buckets = res.aggregations.agg_cities.buckets;
+    var cities = [];
+    for (const bucket of buckets) {
+        let city = {};
+        city.name = bucket.key || "(нет данных)";
+        city.y = bucket.doc_count;
+        curr += city.y;
+        cities.push(city);
+    }
+    var rest = total - curr;
+    cities.push({name: 'Прочие', y: rest});
+
+    return cities;
+});
+
+
 
 var sources = async(function* (q) {
     var res = yield es.search({index: settings.es.index, type: 'post', body: queries.aggs.sources(q)});
@@ -158,5 +179,6 @@ module.exports = {
     leaders: leaders,
     cities: cities,
     sources: sources,
-    postTimeSeries:postTimeSeries
+    postTimeSeries:postTimeSeries,
+    postsByCities: postsByCities
 };

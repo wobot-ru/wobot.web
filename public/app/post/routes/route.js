@@ -49,6 +49,22 @@
             }
         });
 
+        $stateProvider.state('search.chartCities', {
+            url: '/chart-cities',
+            templateUrl: '/public/app/post/partials/chart-cities.html',
+            controller: 'PostsByCitiesChartCtrl',
+            resolve: {
+                model: [ 'postService', 'query', function ( postService, query) {
+                    return postService.postsByCities(query);
+                }],
+                closeFn:['$state', '$stateParams', function ($state, $stateParams) {
+                    return function () {
+                        $state.go('search', {q: $stateParams.q});
+                    };
+                }]
+            }
+        });
+
         $urlRouterProvider.when('', ['$state', function ($state) {
             $state.go('search');
         }]);

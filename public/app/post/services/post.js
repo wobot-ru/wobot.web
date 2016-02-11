@@ -11,6 +11,9 @@
             },
             timeSeries: function(query, interval){
                 return httpService.get(url('time-series'), { params: { q: query, interval:interval} });
+            },
+            postsByCities: function(query){
+                return httpService.get(url('by-cities'), { params: { q: query} });
             }
         };
 

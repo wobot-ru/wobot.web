@@ -51,7 +51,7 @@
                         </a>
                     </li>
                 </ul>
-                <h4>Города</h4>
+                <h4>Города<a ng-click="citiesChart();"><i class="ml5 fa fa-bar-chart"></i></a></h4>
                 <ul class="nav nav-pills nav-faceted nav-stacked">
                     <li ng-class="{'active': cityIsSelected(city.id)}" ng-repeat="city in model.aggs.cities">
                         <a href="javascript:void(0);" ng-click="filterByCity(city.id);">
@@ -79,10 +79,10 @@
             <div class="col-md-9" ng-if="model.posts.total">
                 <div class="mb20">
                     <h4>
-                        <span ng-click="postsChart();" class="label label-primary pointer">Упоминаний: {{model.aggs.totalPosts.byPhrase}}</span>
-                        <span ng-click="profilesChart();" class="label label-primary pointer">Авторов: {{model.aggs.totalProfiles.byPhrase}}</span>
-                        <span ng-click="reachChart();" class="label label-primary pointer">Охват: {{model.aggs.totalReach.byPhrase}}</span>
-                        <span ng-click="engagementChart();" class="label label-primary pointer">Вовлеченность: {{model.aggs.totalEngagement.byPhrase}}</span>
+                        <span ng-click="postsChart();" class="label label-primary pointer">Упоминаний: {{model.aggs.totalPosts.byPhrase}}<i class="ml5 fa fa-bar-chart"></i></span>
+                        <span ng-click="profilesChart();" class="label label-primary pointer">Авторов: {{model.aggs.totalProfiles.byPhrase}}<i class="ml5 fa fa-bar-chart"></i></span>
+                        <span ng-click="reachChart();" class="label label-primary pointer">Охват: {{model.aggs.totalReach.byPhrase}}<i class="ml5 fa fa-bar-chart"></i></span>
+                        <span ng-click="engagementChart();" class="label label-primary pointer">Вовлеченность: {{model.aggs.totalEngagement.byPhrase}}<i class="ml5 fa fa-bar-chart"></i></span>
                     </h4>
                 </div>
                 <div class="mb20">
