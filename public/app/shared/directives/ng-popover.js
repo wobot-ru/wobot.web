@@ -1,5 +1,33 @@
-;(function (module, $) {
+;(function (module, $, angular) {
     "use strict";
+
+    module.directive('ngTooltip', function () {
+        var defaults = {placement: 'bottom', html: true};
+        return {
+            restrict: 'A',
+            scope: {
+                ngTooltip: '='
+            },
+            link: function (scope, el, attrs, formCtrl) {
+               /* var options = angular.extend({}, defaults, scope.$eval(attrs.ngTooltip));*/
+                var createTooltip = function () {
+                    var options = angular.extend({}, defaults, scope.ngTooltip);
+                    el.tooltip('destroy');
+                    if (scope.ngTooltip) {
+                        el.tooltip(options);
+                    }
+                };
+
+                scope.$watch('ngTooltip', function () {
+                    createTooltip();
+                });
+
+                //createTooltip();
+
+            }
+        };
+    });
+
     /**
      * @name ngPopover
      */
@@ -37,4 +65,4 @@
         };
     });
 
-})(window.modules.shared, window.$);
+})(window.modules.shared, window.$, window.angular);

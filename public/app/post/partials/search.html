@@ -9,9 +9,20 @@
                     <button class="btn btn-default" type="button" ng-click="searchByPhrase()">Go!</button>
                   </span>
                 </div>
+                <div class="mt10">
+                    <label class="radio-inline">
+                        <input type="radio" ng-model="query.ql" ng-value="false" name="query_type">
+                        <span ng-tooltip="toolTips.simpleSearch">простой поиск</span>
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" ng-model="query.ql" ng-value="true" name="query_type">
+                        <span ng-tooltip="toolTips.querySearch">язык запросов</span>
+                    </label>
+                </div>
             </div>
         </div>
     </div>
+
     <div ng-if="model.notFound">
         <h4>По Вашему запросу ничего не найдено</h4>
     </div>

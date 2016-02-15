@@ -12,6 +12,7 @@ var Query = function (data) {
     }
 
     data = data || {};
+    self.ql = data.ql || false;
     self.filter  = data.filter || {};
     self.paging = data.paging || { page: 1, pagesize: 20 };
     self.order = data.order || new Order();

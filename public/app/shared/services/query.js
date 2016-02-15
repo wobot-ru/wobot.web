@@ -44,6 +44,7 @@
                     return new DefaultQuery();
                 }
 
+                self.ql = false;
                 self.filter = {};
                 self.paging = { page: 1, pagesize: pageSize };
                 self.order = new DefaultOrder(sortColumn, sortOrder);

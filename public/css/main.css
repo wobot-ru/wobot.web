@@ -8926,3 +8926,12 @@ input.type-date {
 .pointer {
   cursor: pointer;
 }
+.tooltip-inner {
+  max-width: none;
+}
+.tooltip-body {
+  text-align: left;
+  width: 320px;
+  font-weight: normal;
+  font-size: 0.95em;
+}
