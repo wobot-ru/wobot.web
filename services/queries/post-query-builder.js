@@ -65,8 +65,13 @@ Builder.prototype.build = function () {
     var must = query.bool.must;
     var filter = query.bool.filter.query.bool.must;
 
-    if (q.ql){
-        must.push({"simple_query_string": {"query": q.filter.phrase, "fields": ["post_body.ru"]}})
+    if (q.ql) {
+        must.push({
+            "query_string": {
+                "query": q.filter.phrase,
+                "default_field": "post_body.ru"
+            }
+        })
     }
     else {
         must.push({"match": {"post_body.ru": q.filter.phrase}})
