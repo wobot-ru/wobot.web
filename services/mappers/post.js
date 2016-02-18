@@ -1,5 +1,21 @@
 "use strict";
 var striptags = require('striptags');
+var _ = require('lodash');
+
+var parseHighlight = function(highlight){
+    var result = [];
+    for (const field in highlight) {
+        if (highlight.hasOwnProperty(field)) {
+            let fragments = highlight[field];
+            for (const fragment of fragments) {
+                if (!_.some(result, fragment)){
+                    result.push(striptags(fragment, ['hl']));
+                }
+            }
+        }
+    }
+    return '...' + result.join('...') + '...';
+};
 
 var hitToPost = function (hit, post) {
     post = post || {};
@@ -17,7 +33,8 @@ var hitToPost = function (hit, post) {
     var highlights = highlighter.highlight(text, phrase);
     post.text = '...' + highlights.join('...') + '...';*/
 
-    post.text = '...' + striptags(hit.highlight["post_body.ru"].join('...'), ['hl']) + '...';
+    //post.text = '...' + striptags(hit.highlight["post_body.ru"].join('...'), ['hl']) + '...';
+    post.text = parseHighlight(hit.highlight);
 
     post.score = hit._score;
     post.source = hit._source.source;
@@ -29,5 +46,6 @@ var hitToPost = function (hit, post) {
 
     return post;
 };
+
 
 module.exports.hitToPost = hitToPost;

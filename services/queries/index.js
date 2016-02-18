@@ -19,8 +19,16 @@ var postList = function (q) {
             ],
             "fields": {
                 "post_body.ru": {
-                    "fragment_size": 300,
-                    "number_of_fragments": 3
+                    "fragment_size": 256,
+                    "number_of_fragments": 2
+                },
+                "post_body.en": {
+                    "fragment_size": 256,
+                    "number_of_fragments": 2
+                },
+                "post_body.na": {
+                    "fragment_size": 256,
+                    "number_of_fragments": 2
                 }
             }
         }
