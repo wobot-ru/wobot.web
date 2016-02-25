@@ -23,7 +23,6 @@
     "express": "^4.13.3",
     "font-awesome": "^4.5.0",
     "highcharts": "^4.2.2",
-    "java": "^0.6.0",
     "jquery": "^2.2.0",
     "lodash": "^4.0.0",
     "moment": "^2.11.1",

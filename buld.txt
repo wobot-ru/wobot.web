@@ -1,5 +1,2 @@
-cd ./java
-mvn package
-cd ../
 npm install
 npm start
