@@ -1,5 +1,5 @@
 var Order = function (sortColumn, sortOrder) {
-    this.items = [{column: sortColumn || 'id', dir: sortOrder || 'asc'}];
+    this.items = [{column: sortColumn || '_id', dir: sortOrder || 'asc'}];
 };
 
 var Query = function (data) {

@@ -53,7 +53,8 @@
 
                 scope.$watch(function () { return formErrorsCtrl.errors; }, function (errors) {
                     var $input;
-                    var message = errors && errors[key] && errors[key].errors && errors[key].errors.length && errors[key].errors[0].errorMessage ? errors[key].errors[0].errorMessage : null;
+                    // var message = errors && errors[key] && errors[key].errors && errors[key].errors.length && errors[key].errors[0].errorMessage ? errors[key].errors[0].errorMessage : null;
+                    var message = errors && errors[key] && errors[key].length ? errors[key][0] : null;
                     if (message) {
                         scope.error = { key: key, message: message };
                         $input = getInput(key);

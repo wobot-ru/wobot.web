@@ -8905,13 +8905,19 @@ input.type-date {
 .nav-sorted > li > span.title {
   padding-left: 0;
 }
-.nav-sorted > li.active.asc > a:after {
+.nav-sorted > li.active.asc > a:after,
+a.asc:after {
   content: '\2191';
   margin-left: 2px;
 }
-.nav-sorted > li.active.desc > a:after {
+.nav-sorted > li.active.desc > a:after,
+a.desc:after {
   content: '\2193';
   margin-left: 2px;
+}
+a.asc:hover,
+a.desc:hover {
+  text-decoration: none;
 }
 .pager-top > .pagination {
   margin-top: 0;
@@ -8934,4 +8940,78 @@ input.type-date {
   width: 320px;
   font-weight: normal;
   font-size: 0.95em;
+}
+.table-default {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+}
+.table-default > thead > tr > th,
+.table-default > tbody > tr > th,
+.table-default > tfoot > tr > th,
+.table-default > thead > tr > td,
+.table-default > tbody > tr > td,
+.table-default > tfoot > tr > td {
+  padding: 8px;
+  line-height: 1.42857143;
+  vertical-align: top;
+  border-top: 1px solid #ddd;
+}
+.table-default > thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #ddd;
+}
+.table-default > caption + thead > tr:first-child > th,
+.table-default > colgroup + thead > tr:first-child > th,
+.table-default > thead:first-child > tr:first-child > th,
+.table-default > caption + thead > tr:first-child > td,
+.table-default > colgroup + thead > tr:first-child > td,
+.table-default > thead:first-child > tr:first-child > td {
+  border-top: 0;
+}
+.table-default > tbody + tbody {
+  border-top: 2px solid #ddd;
+}
+.table-default .table {
+  background-color: #fff;
+}
+.table-default > thead > tr > th,
+.table-default > tbody > tr > th,
+.table-default > tfoot > tr > th,
+.table-default > thead > tr > td,
+.table-default > tbody > tr > td,
+.table-default > tfoot > tr > td {
+  border: 1px solid #ddd;
+}
+.table-default > thead > tr > th,
+.table-default > thead > tr > td {
+  border-bottom-width: 2px;
+}
+.table-default > tbody > tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+.table-default > tbody > tr:hover {
+  background-color: #f5f5f5;
+}
+.table-default > thead > tr > th {
+  background-color: #f5f5f5;
+  border-bottom: none;
+}
+.text-center {
+  text-align: center;
+}
+.filter-row,
+.filter-row th {
+  font-weight: normal;
+}
+.form-control.input-validation-error {
+  border-color: #a94442;
+}
+.field-validation-error {
+  color: #a94442;
+  font-size: 0.9em;
+}
+.fa-1_5x {
+  font-size: 1.5em;
 }

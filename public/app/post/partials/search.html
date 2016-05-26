@@ -131,7 +131,9 @@
                         <div class="col-md-3">
                             Юзер:
                             <a target="_blank" ng-href="{{post.profile_href}}">
-                                <span ng-bind="post.profile_name"></span> <span style="display: none;">{{post.profile_id}}</span>
+                                <span ng-bind="post.profile_name"></span>
+                                <span data-attr="profile_id" style="display: none;">{{post.profile_id}}</span>
+                                <span data-attr="is_comment" style="display: none;">{{post.is_comment}}</span>
                             </a>
                         </div>
                         <div class="col-md-2">

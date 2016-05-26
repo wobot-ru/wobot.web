@@ -1,0 +1,74 @@
+<div>
+    <h2 class="sub-header">Темы для фокус кроула</h2>
+
+    <div class="row mt15 mb15">
+        <div class="col-md-12">
+            <a class="btn btn-primary" ui-sref="theme.add">
+                <span class="fa fa-plus"></span>
+                Создать новую
+            </a>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                <span ng-pager ng-page-size="query.paging.pagesize"
+                      ng-current-page="query.paging.page" ng-total="model.total"
+                      ng-page-click="changePage(page)"></span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-default">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th><a ng-click="sort('name')" ng-class="sortState('name')">Наименование</a></th>
+                        <th>Запрос на yandex.ru</th>
+                        <th class="text-center">Страницы</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                    <tr class="filter-row">
+                        <th></th>
+                        <th>
+                            <input type="text" class="form-control" placeholder="Фильтр по наименованию..."
+                                   ng-model="query.filter.name" ng-enter="filter();">
+                        </th>
+                        <th>
+                            <input type="text" class="form-control" placeholder="Фильтр по фразе..."
+                                   ng-model="query.filter.phrase" ng-enter="filter();">
+                        </th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in model.items">
+                        <td>#</td>
+                        <td>{{item.name}}</td>
+                        <td><a target="_blank" ng-href="https://yandex.ru/search/?text={{item.yandex.query}}&site=ok.ru">{{item.yandex.query}}</a>
+                        </td>
+                        <td class="text-center">{{item.yandex.pages}}</td>
+                        <td class="text-center">
+                            <span>
+                                <a title="Редактировать"
+                                   ui-sref="theme.edit({id: item._id, returnUrl: currentUrl})"><span
+                                        class="fa fa-edit fa-1_5x"></span></a>
+                                <a title="Удалить" ng-click="remove(item);"><span
+                                        class="fa fa-remove fa-1_5x"></span></a>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <span ng-pager ng-page-size="query.paging.pagesize"
+                      ng-current-page="query.paging.page" ng-total="model.total"
+                      ng-page-click="changePage(page)"></span>
+            </div>
+        </div>
+    </div>
+
+
+</div>

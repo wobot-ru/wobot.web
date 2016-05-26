@@ -1,0 +1,30 @@
+<div>
+    <h2 class="sub-header">Темы для фокус кроула</h2>
+
+    <form ng-form-errors="errors">
+
+        <div class="form-group">
+            <label for="name">Наименование</label>
+            <input class="form-control" ng-model="model.name" type="text" id="name" placeholder="Наименование">
+            <span ng-validation-for="name" ng-render="true"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="yandex.query">Текст запроса на яндексе</label>
+            <textarea class="form-control" rows="2" ng-model="model.yandex.query" id="yandex.query" placeholder="Запрос на яндексе"></textarea>
+            <span ng-validation-for="yandex.query" ng-render="true"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="name">Количество страниц для парсинга на яндекса</label>
+            <input class="form-control" ng-model="model.yandex.pages" type="text" id="yandex.pages" placeholder="Кол-во страниц">
+            <span ng-validation-for="yandex.pages" ng-render="true"></span>
+        </div>
+
+
+
+        <button ng-click="save();" type="button" class="btn btn-primary">Сохранить</button>
+        <button ng-click="cancel();" type="button" class="btn btn-default">Отмена</button>
+
+    </form>
+</div>
