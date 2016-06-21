@@ -59,6 +59,20 @@ var validate = function(dto) {
         errors['yandex.pages'] = errors['yandex.pages'] || [];
         errors['yandex.pages'].push('Необходимо ввести положительное число, не превышающее 200');
     }
+
+    if (!(dto.google && dto.google.query)){
+        errors['google.query'] = errors['google.query'] || [];
+        errors['google.query'].push('Необходимо ввести запрос');
+    }
+    if (!(dto.google && dto.google.pages)){
+        errors['google.pages'] = errors['google.pages'] || [];
+        errors['google.pages'].push('Необходимо ввести количество страниц');
+    }
+    if (!(dto.google && dto.google.pages && validator.isInt(dto.google.pages.toString(), { min: 1, max: 200 }))){
+        errors['google.pages'] = errors['google.pages'] || [];
+        errors['google.pages'].push('Необходимо ввести положительное число, не превышающее 200');
+    }
+
     return errors;
 };
 

@@ -1,6 +1,10 @@
 ;(function (module, _) {
     "use strict";
 
+    module.filter('encode', function() {
+        return window.encodeURIComponent;
+    });
+
     module.controller("ThemeListCtrl", ['$scope', '$controller', '$location', '$state', 'dialogService', 'model', 'query', 'options', 'service', 'progress', function ($scope, $controller, $location, $state, dialogService, model, query, options, service, progress) {
 
         $scope.model = model;

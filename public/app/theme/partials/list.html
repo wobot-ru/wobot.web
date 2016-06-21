@@ -24,9 +24,9 @@
                     <tr>
                         <th>#</th>
                         <th><a ng-click="sort('name')" ng-class="sortState('name')">Наименование</a></th>
-                        <th>Запрос на yandex.ru</th>
+                        <th>Запрос</th>
                         <th class="text-center">Страницы</th>
-                        <th class="text-center">Action</th>
+                        <th class="text-center">Действие</th>
                     </tr>
                     <tr class="filter-row">
                         <th></th>
@@ -46,9 +46,24 @@
                     <tr ng-repeat="item in model.items">
                         <td>#</td>
                         <td>{{item.name}}</td>
-                        <td><a target="_blank" ng-href="https://yandex.ru/search/?text={{item.yandex.query}}&site=ok.ru">{{item.yandex.query}}</a>
+                        <td>
+                            <div>
+                                <span>ya.ru: </span>
+                                <a target="_blank" ng-href="https://yandex.ru/search/?text={{item.yandex.query | encode}}&site=ok.ru">{{item.yandex.query}}</a>
+                            </div>
+                            <div>
+                                <span>google.ru: </span>
+                                <a target="_blank" ng-href="https://www.google.ru/#q={{item.google.query + ' site:ok.ru' | encode}}&filter=0">{{item.google.query}}</a>
+                            </div>
                         </td>
-                        <td class="text-center">{{item.yandex.pages}}</td>
+                        <td>
+                            <div>
+                                <span>ya.ru: {{item.yandex.pages}}</span>
+                            </div>
+                            <div>
+                                <span>google.ru: {{item.google.pages}}</span>
+                            </div>
+                        </td>
                         <td class="text-center">
                             <span>
                                 <a title="Редактировать"

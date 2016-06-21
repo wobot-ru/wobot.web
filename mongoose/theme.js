@@ -6,6 +6,10 @@ var schema = mongoose.Schema({
     yandex: {
         query: String,
         pages: Number
+    },
+    google: {
+        query: String,
+        pages: Number
     }
 });
 

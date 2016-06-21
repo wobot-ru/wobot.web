@@ -10,15 +10,28 @@
         </div>
 
         <div class="form-group">
-            <label for="yandex.query">Текст запроса на яндексе</label>
+            <label for="yandex.query">Текст запроса на ya.ru</label>
             <textarea class="form-control" rows="2" ng-model="model.yandex.query" id="yandex.query" placeholder="Запрос на яндексе"></textarea>
             <span ng-validation-for="yandex.query" ng-render="true"></span>
         </div>
 
+
         <div class="form-group">
-            <label for="name">Количество страниц для парсинга на яндекса</label>
+            <label for="name">Количество страниц для парсинга на ya.ru</label>
             <input class="form-control" ng-model="model.yandex.pages" type="text" id="yandex.pages" placeholder="Кол-во страниц">
             <span ng-validation-for="yandex.pages" ng-render="true"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="google.query">Текст запроса на google.ru</label>
+            <textarea class="form-control" rows="2" ng-model="model.google.query" id="google.query" placeholder="Запрос на гугле"></textarea>
+            <span ng-validation-for="google.query" ng-render="true"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="name">Количество страниц для парсинга на google.ru</label>
+            <input class="form-control" ng-model="model.google.pages" type="text" id="google.pages" placeholder="Кол-во страниц">
+            <span ng-validation-for="google.pages" ng-render="true"></span>
         </div>
 
 

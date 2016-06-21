@@ -10,7 +10,8 @@
                 return {
                     id: null,
                     name: '',
-                    yandex: {query: '', pages: 10}
+                    yandex: {query: '', pages: 10},
+                    google: {query: '', pages: 10}
                 };
             },
             list: function (query) {
