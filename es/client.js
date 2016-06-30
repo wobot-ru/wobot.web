@@ -4,7 +4,8 @@ var settings = require('../config/settings');
 
 var client = new elastic.Client({
     log: settings.es.log,
-    hosts: settings.es.hosts
+    hosts: settings.es.hosts,
+    requestTimeout: 180000
     //host: settings.es.host
 });
 
