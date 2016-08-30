@@ -2,9 +2,10 @@ var moment = require('moment');
 var _ = require('lodash');
 var auth = 'es:Elastic777';
 
-const MONTHS = 6;
+const MONTHS = 24;
 
 var calculateIndexName = function (months) {
+    // return 'wobot33';
     var now = moment.utc();
     var parts = [];
     parts.push({year: now.year(), month: now.month()});
@@ -20,9 +21,12 @@ var calculateIndexName = function (months) {
 
 module.exports = {
     es: {
+        // hosts: [
+        //     {host: '91.218.113.136', port: 9200, auth: auth},
+        //     {host: '91.210.105.210', port: 9200, auth: auth}
+        // ],
         hosts: [
-            {host: '91.218.113.136', port: 9200, auth: auth},
-            {host: '91.210.105.210', port: 9200, auth: auth}
+            {host: '127.0.0.1', port: 9200, auth: auth}
         ],
         get index() {
             return calculateIndexName(MONTHS);

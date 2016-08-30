@@ -14,7 +14,7 @@ var  findPosts= async(function* (q) {
     return { total: total, items: items };
 });
 
-var search = async(function* (query) {
+var search__ = async(function* (query) {
 
     if (!query.filter.phrase)
         return { emptyPhrase: true };
@@ -46,6 +46,48 @@ var search = async(function* (query) {
             leaders: yield aggsService.leaders(query),
             cities: yield aggsService.cities(query),
             sources: yield aggsService.sources(query)
+        }
+    };
+});
+
+var search = async(function* (query) {
+
+    if (!query.filter.phrase)
+        return { emptyPhrase: true };
+
+    var aggs = yield [
+        findPosts(query),
+        aggsService.totalPosts.byPhrase(query),
+        aggsService.totalProfiles.byPhrase(query),
+        aggsService.totalReach.byPhrase(query),
+        aggsService.totalEngagement.byPhrase(query),
+        aggsService.leaders(query),
+        aggsService.cities(query),
+        aggsService.sources(query)
+    ];
+
+    if (!aggs[0].total)
+        return { notFound: true };
+
+    return {
+        posts: aggs[0],
+        aggs: {
+            totalPosts:{
+                byPhrase: aggs[1]
+            },
+            totalProfiles:{
+                byPhrase: aggs[2]
+            },
+            totalReach:{
+                byPhrase: aggs[3]
+            },
+            totalEngagement:{
+                byPhrase: aggs[4]
+            },
+            leaders: aggs[5],
+            cities: aggs[6],
+            sources: aggs[7],
+            test: 'ok'
         }
     };
 });
