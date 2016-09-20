@@ -10,6 +10,10 @@ var schema = mongoose.Schema({
     google: {
         query: String,
         pages: Number
+    },
+    facebook: {
+        query: String,
+        pages: Number
     }
 });
 

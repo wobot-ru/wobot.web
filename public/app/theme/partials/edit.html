@@ -34,6 +34,18 @@
             <span ng-validation-for="google.pages" ng-render="true"></span>
         </div>
 
+        <div class="form-group">
+            <label for="google.query">Текст запроса на facebook.com</label>
+            <textarea class="form-control" rows="2" ng-model="model.facebook.query" id="facebook.query" placeholder="Запрос на facebook"></textarea>
+            <span ng-validation-for="facebook.query" ng-render="true"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="name">Количество страниц для парсинга на facebook.com</label>
+            <input class="form-control" ng-model="model.facebook.pages" type="text" id="facebook.pages" placeholder="Кол-во страниц">
+            <span ng-validation-for="facebook.pages" ng-render="true"></span>
+        </div>
+
 
 
         <button ng-click="save();" type="button" class="btn btn-primary">Сохранить</button>
